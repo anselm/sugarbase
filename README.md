@@ -28,7 +28,7 @@ Fragments are also HTMLElements... there is nothing magical about them. Use at w
 
 ## Routing
 
-Routing is the cornerstone of the app. To start the router make an instance of it and call reset. This forces it to attempt to produce the current URL. To go to a page you build a hyper link to it such as <a href="/about">go to about page</a>. All links are intercepted.
+Routing is the cornerstone of the app. To start the router make an instance of it and call reset. This forces it to attempt to produce the current URL. To go to a page you build a hyper link to it... all links are intercepted.
 
 ## Firebase and Reactivity
 
