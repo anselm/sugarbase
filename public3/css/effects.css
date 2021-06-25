@@ -1,0 +1,251 @@
+
+.pulse {
+  border:3px solid red;
+  animation: pulse 2s infinite;
+}
+
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    border: 3px solid rgba(0.9, 0, 0, 0.9);
+  }
+
+  70% {
+    transform: scale(1);
+    border:3px solid rgba(0.5, 0, 0, 0.5);
+  }
+
+  100% {
+    transform: scale(0.95);
+    border:3px solid rgba(0.9, 0, 0, 0.9);
+  }
+}
+
+
+* {
+  transition: all .2s ease-in-out; 
+}
+
+.grow { transition: all .2s ease-in-out; }
+.grow:hover { transform: scale(1.1); }
+
+.glow { transition: all .2s ease-in-out; border-radius:100%; }
+.glow:hover { box-shadow: 0 5px 15px rgba(145, 92, 182, .4); }
+
+.selectme { transition: all .2s ease-in-out; border-radius:100%; background:white; }
+.selectme:hover { background: 0 5px 15px rgba(145, 92, 182, .4); }
+
+@keyframes wiggle {
+    0% { transform: rotate(8deg) scale(1.1); }
+   20% { transform: rotate(-8deg) scale(1.1); }
+   40% { transform: rotate(4deg) scale(1.3); }
+   60% { transform: rotate(-4deg) scale(1.3); }
+   80% { transform: rotate(0deg) scale(1.0); }
+}
+
+.wiggle:hover {
+  animation: wiggle 1.0s;
+}
+
+
+
+
+
+
+
+
+
+:root {
+  --primary: #88D5BF;
+  --secondary: #5D6BF8;
+  --third: #e27fcb;
+}
+
+.wackywobble {
+  background: linear-gradient(45deg, var(--primary) 0%, var(--secondary) 100%);
+  animation: morph 8s ease-in-out infinite;
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  transition: all 1s ease-in-out;
+  padding:100px;
+}
+
+@keyframes morph {
+  0% {
+      border-radius:  60% 40% 30% 70% / 60% 30% 70% 40%;
+      background: linear-gradient(45deg, var(--primary) 0%, var(--secondary) 100%);
+  } 
+  
+  50% {
+      border-radius:  30% 60% 70% 40% / 50% 60% 30% 60%;
+      background: linear-gradient(45deg, var(--third) 0%, var(--secondary) 100%);
+  }
+  
+  100% {
+    border-radius:  60% 40% 30% 70% / 60% 30% 70% 40%;
+    background: linear-gradient(45deg, var(--primary) 0%, var(--secondary) 100%);
+  } 
+}
+
+
+
+.wackydash {
+  font-size: 24px;
+  border:10px solid black;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+  min-height: 3em;
+  resize: both;
+  background: #ffd73e33;
+  border-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='100' height='100' viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'%3E %3Cstyle%3Epath%7Banimation:stroke 5s infinite linear%3B%7D%40keyframes stroke%7Bto%7Bstroke-dashoffset:776%3B%7D%7D%3C/style%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='0%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%232d3561' /%3E%3Cstop offset='25%25' stop-color='%23c05c7e' /%3E%3Cstop offset='50%25' stop-color='%23f3826f' /%3E%3Cstop offset='100%25' stop-color='%23ffb961' /%3E%3C/linearGradient%3E %3Cpath d='M1.5 1.5 l97 0l0 97l-97 0 l0 -97' stroke-linecap='square' stroke='url(%23g)' stroke-width='3' stroke-dasharray='388'/%3E %3C/svg%3E") 1;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(1turn);
+  }
+}
+
+/*
+
+.wackyrainbow {
+  position: relative;
+  z-index: 0;
+  width: 400px;
+  height: 300px;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 2rem;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    z-index: -2;
+    left: -50%;
+    top: -50%;
+    width: 200%;
+    height: 200%;
+    background-color: #399953;
+    background-repeat: no-repeat;
+    background-size: 50% 50%, 50% 50%;
+    background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+    background-image: linear-gradient(#399953, #399953), linear-gradient(#fbb300, #fbb300), linear-gradient(#d53e33, #d53e33), linear-gradient(#377af5, #377af5);
+    animation: rotate 4s linear infinite;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    left: 6px;
+    top: 6px;
+    width: calc(100% - 12px);
+    height: calc(100% - 12px);
+    background: white;
+    border-radius: 5px;
+  }
+}
+
+
+
+
+
+
+
+.wackybox{
+  width: 300px; height: 200px;
+  background-color: #DDFFF7;
+  position: relative;
+  box-shadow: 10px 10px 42px 0 rgba(0,0,0,0.75);
+}
+.wackybox:after, .wackybox:before{
+  mix-blend-mode:multiply;
+  filter:none;
+  z-index: -1;
+  content:'';
+  width:calc(100% + (50px * 2));
+  height:calc(100% + (50px * 2));
+  position: absolute;
+  display: block;
+  animation: border 10s ease-in-out infinite;
+  transform:translateX(-50px) translateY(-50px);
+}
+@keyframes border {
+  0%, 100% {
+    -webkit-clip-path: polygon(0 0, calc(100% - (33.3333333333px)) calc(0% + (33.3333333333px)), 100% 100%, calc(0% + (33.3333333333px)) calc(100% - (33.3333333333px)));
+            clip-path: polygon(0 0, calc(100% - (33.3333333333px)) calc(0% + (33.3333333333px)), 100% 100%, calc(0% + (33.3333333333px)) calc(100% - (33.3333333333px)));
+  }
+  50% {
+    -webkit-clip-path: polygon(calc(0% + (33.3333333333px)) calc(0% + (33.3333333333px)), 100% 0, calc(100% - (33.3333333333px)) calc(100% - (33.3333333333px)), 0 100%);
+            clip-path: polygon(calc(0% + (33.3333333333px)) calc(0% + (33.3333333333px)), 100% 0, calc(100% - (33.3333333333px)) calc(100% - (33.3333333333px)), 0 100%);
+  }
+}
+
+.wackybox:after{
+  animation-delay: -5s;
+  background-color: #93e1d8;
+  clip-path: polygon(0 0, calc(100% - (33.3333333333px)) calc(0% + (33.3333333333px)), 100% 100%, calc(0% + (33.3333333333px)) calc(100% - (33.3333333333px)));
+}
+.wackybox:before {
+  background-color: #AA4465;
+    clip-path: polygon(calc(0% + (33.3333333333px)) calc(0% + (33.3333333333px)), 100% 0, calc(100% - (33.3333333333px)) calc(100% - (33.3333333333px)), 0 100%);
+}
+
+.wackybox:hover:after{
+  animation-delay: -0.1s;
+}
+.wackybox:hover:before, .wackybox:hover:after {
+
+          animation-duration: 0.2s;
+}
+*/
+
+
+
+.box{
+  width: 300px; height: 200px;
+  background-color: #DDFFF7;
+  position: relative;
+  box-shadow: 10px 10px 42px 0 rgba(0,0,0,0.75);
+  z-index:3;
+}
+.box:after, .box:before{
+  mix-blend-mode:multiply;
+  filter:none;
+  z-index: 2;
+  content:'';
+  width:calc(100% + (50px * 2));
+  height:calc(100% + (50px * 2));
+  position: absolute;
+  display: block;
+  animation: border 10s ease-in-out infinite;
+  transform:translateX(-50px) translateY(-50px);
+}
+@keyframes border {
+  0%, 100% {
+    -webkit-clip-path: polygon(0 0, calc(100% - (33.3333333333px)) calc(0% + (33.3333333333px)), 100% 100%, calc(0% + (33.3333333333px)) calc(100% - (33.3333333333px)));
+            clip-path: polygon(0 0, calc(100% - (33.3333333333px)) calc(0% + (33.3333333333px)), 100% 100%, calc(0% + (33.3333333333px)) calc(100% - (33.3333333333px)));
+  }
+  50% {
+    -webkit-clip-path: polygon(calc(0% + (33.3333333333px)) calc(0% + (33.3333333333px)), 100% 0, calc(100% - (33.3333333333px)) calc(100% - (33.3333333333px)), 0 100%);
+            clip-path: polygon(calc(0% + (33.3333333333px)) calc(0% + (33.3333333333px)), 100% 0, calc(100% - (33.3333333333px)) calc(100% - (33.3333333333px)), 0 100%);
+  }
+}
+
+.box:after{
+  animation-delay: -5s;
+  background-color: #93e1d8;
+  clip-path: polygon(0 0, calc(100% - (33.3333333333px)) calc(0% + (33.3333333333px)), 100% 100%, calc(0% + (33.3333333333px)) calc(100% - (33.3333333333px)));
+}
+.box:before {
+  background-color: #AA4465;
+    clip-path: polygon(calc(0% + (33.3333333333px)) calc(0% + (33.3333333333px)), 100% 0, calc(100% - (33.3333333333px)) calc(100% - (33.3333333333px)), 0 100%);
+}
+
+.box:hover:after{
+  animation-delay: -0.1s;
+}
+.box:hover:before, .box:hover:after {
+
+          animation-duration: 0.2s;
+}

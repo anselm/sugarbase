@@ -38,17 +38,21 @@ window.appstate = {
 
 	/// business logic
 
-	login: function() {
-		this.currentParty = {displayName:"george"}
-	},
-
 	signout: function() {
+		this.firebase.auth().signOut()
 		this.currentParty = 0
 	},
 
 	startup: async function(callback) {
-		this.currentParty = 0
-		callback()
+		this.firebase = firebase
+		this.firestore = firebase.firestore()
+		firebase.auth().onAuthStateChanged(user => {
+			console.log("User state change from firebase")
+			console.log(user)
+			this.currentParty = user
+			callback()
+		});
 	}
 }
+
 

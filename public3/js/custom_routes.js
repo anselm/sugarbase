@@ -5,7 +5,7 @@
 
 import './components/nav_bar_component.js'
 import './pages/splash_page.js'
-import './pages/party_home_page.js'
+import './pages/party_home_page_css.js'
 import './pages/party_login_page.js'
 import './pages/party_signout_page.js'
 import './pages/generic_404_page.js'

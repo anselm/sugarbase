@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<title></title>
+<link rel="icon" href="/art/favicon.ico">
+
+<!-- It's nice to use a Web Monetization Payment Pointer - use your own unless you want to pay me - see coil.com -->
+<meta name="monetization" content="$coil.xrptipbot.com/5ra3zZ_aRIS8CUUFzZcHcQ">
+
+<!-- Disable scaling on mobile displays -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+<!-- Register .webmanifest as a type for android desktop -->
+<staticContent>
+<mimeMap fileExtension=".json" mimeType="application/json" />
+<mimeMap fileExtension=".webmanifest" mimeType="application/manifest+json" />
+</staticContent>
+
+<!-- Web Application Manifest - see https://developer.mozilla.org/en-US/docs/Web/Manifest -->
+<link rel="manifest" type="application/json" href="manifest.json">
+
+<!-- recaptcha is nice to use also -->
+<script src="https://www.google.com/recaptcha/api.js"></script>
+
+<!-- browsers will paint emoji badly sometimes unless they get an early hint for some weird reason -->
+<meta name="🔒🔒🔒" content="this is a hint to tell the browser that there will be emoji">
+
+<!-- Allow add to homescreen as a pseudo PWA kind of app on android and ios -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="Sugar">
+<meta name="theme-color" content="#4285F4">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Sugar">
+<meta name="apple-mobile-web-app-status-bar-style" content="#4285F4">
+
+<!-- My approach to layered global styling; I use local per component styles as well but this is nice for consistent ux -->
+<link rel="stylesheet" type="text/css" href="/css/commoncore.css">
+<link rel="stylesheet" type="text/css" href="/css/buttons.css">
+<link rel="stylesheet" type="text/css" href="/css/effects.css">
+<link rel="stylesheet" type="text/css" href="/css/shadow.css">
+<link rel="stylesheet" type="text/css" href="/css/frameburst.css">
+<link rel="stylesheet" type="text/css" href="/css/loadingeffect.css">
+<link rel="stylesheet" type="text/css" href="/css/springtime.css">
+
+</head>
+<body>
+</body>
+</html>
+
+<!-- jump to js and complete work there -->
+<script type=module>
+import '/js/startup.js'
+</script>
