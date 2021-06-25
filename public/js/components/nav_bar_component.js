@@ -3,11 +3,10 @@ class NavBarComponent extends HTMLElement {
 
 	constructor() {
 		super()
-		let scope = this
 		window.appstate.observe("currentParty",this.redraw.bind(this));
 	}
 
-	async redraw() {
+	redraw() {
 
 		let party = window.appstate.currentParty ? "party" : "login"
 
