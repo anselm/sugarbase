@@ -7,11 +7,13 @@
 
 window.appstate = {
 
-	// reactivity / observability
-
 	realstate:{},
 	observers:{},
 	observerid:0,
+
+	///
+	/// a custom simple reactivity / observability pattern
+	///
 
 	observe: function(name,callback) {
 		this.observerid++;

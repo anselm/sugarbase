@@ -32,9 +32,7 @@ Routing is the cornerstone of the app. To start the router make an instance of i
 
 ## Firebase and Reactivity
 
-Reactivity is a highly desirable quality for building websites. Page contents can change often and it can be a hassle to repaint a page. Traditional systems such as React use the shadow DOM and look for deltas or differences between what is presented and what is not presented. However I feel like I can explicitly manage differences if they are well scoped so I use a weaker solution that sits in-between two extremes of repainting everything versus keeping a difference list.
-
-The way I achieve reactivity is with an idea of observers and observability. I register a firebase state observer by passing it a database query (something for firebase to report changes on). Then when the page is displayed it receives change events. On each change event I manually perform the CRUD operation such that the display matches the database state. When a page first comes up or regains visibility I can get a list of all changes and then adjust the page as needed.
+Reactivity is a highly desirable quality for building websites. Page contents can change often and it can be a hassle to repaint a page. Traditional systems such as React use the shadow DOM and look for deltas or differences between what is presented and what is not presented. However I feel like I can explicitly manage differences if they are well scoped so I use a weaker solution which is included in business_logic that sits in-between two extremes of repainting everything versus keeping a difference list. MobX is also a good choice and there are firebase observability bindings as well.
 
 ## CSS
 
