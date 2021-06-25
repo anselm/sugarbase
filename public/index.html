@@ -49,8 +49,7 @@ import '/js/pages/splash_page.js'
 import '/js/pages/party_home_page.js'
 import '/js/pages/party_login_page.js'
 import '/js/pages/party_signout_page.js'
-
-
+import '/js/pages/generic_404_page.js'
 ///
 /// A handler for home page
 ///
@@ -106,7 +105,7 @@ router.use(async (segments)=>{
 ///
 
 router.use(async ()=> {
-	return "error-404-page"
+	return "generic-404-page"
 })
 
 ///
