@@ -1,6 +1,15 @@
 
 class SplashPage extends HTMLElement {
+
+	constructor() {
+		super();
+		// This is not a good place to paint your display due to limits in HTMLElement
+	}
+
 	componentWillShow() {
+
+		// This is a special callback that the router invokes - it is a nice time to build your display
+
 		this.className="page"
 
 		let moniker = window.appstate.currentParty ? window.appstate.currentParty.moniker : 0
@@ -19,6 +28,10 @@ class SplashPage extends HTMLElement {
 				<font color="white">Login Status: ${moniker}</font>
 			</div>
 			`
+	}
+
+	connectedCallback() {
+		// The DOM will call this also and it is another way to paint your display
 	}
 }
 

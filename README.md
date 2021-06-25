@@ -20,40 +20,7 @@ Sugar only shows one "page" at a time and hides the rest.
 
 Sugar does not have any reactive features built in - pages and page contents don't get "triggered" or "refreshed" or "updated" in the background by any state change.
 
-HTMLElements in pure javascript are used to represent a page. This is largely built in to modern browsers and although there is a bit of extra extension support with componentWillShow() this is otherwise largely vanilla. Here are a few different ways to populate an HTMLElement with content:
-
-<script type="module">
-	class AboutPage extends HTMLElement {
-
-		constructor() {
-			// call async paint without waiting for promise completion to circumvent an issue with DOM readiness
-			paint();
-		}
-		
-		async componentWillShow() {
-			// our router calls this method if it exists, what is nice is that this occurs before display up not after
-			await paint();
-		}
-
-		async connectedCallback() {
-			// this is a built in way to prepare a page
-			// the flaw in this approach is that the user can see the page being built - it can occur after display up
-			// https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements
-			await paint()
-		}
-
-		async paint() {
-			// set or reset any CSS properties you wish
-			this.className="page"
-			// create or modify any layout
-			this.innerHTML = '<a href="/help">goto help page</a>'
-		}
-	}
-
-	// The browser requires that you register the customElement with a tag. The tag must have a dash in it.
-
-	customElements.define('about-page', AboutPage )
-</script>
+HTMLElements in pure javascript are used to represent a page. This is largely built in to modern browsers and although there is a bit of extra extension support with componentWillShow() this is otherwise largely vanilla. 
 
 ## Fragment Concept
 
@@ -61,27 +28,7 @@ Fragments are also HTMLElements... there is nothing magical about them. Use at w
 
 ## Routing
 
-Routing is the cornerstone of the app. To start the router make an instance of it and call reset. This forces it to attempt to produce the current URL.
-
-<script type=module>
-
-	import {Router} from 'router.js'
-
-	document.addEventListener('DOMContentLoaded',() => {
-
-		// build a router
-		let router = window.router = new Router()
-
-		// add a page
-		router.add("about", "about-page" )
-
-		// start the router - it will look at current browser URL and make sure that page is up
-		router.reset()
-
-	})
-</script>
-
-To go to a page you build a hyper link to it such as <a href="/about">go to about page</a>
+Routing is the cornerstone of the app. To start the router make an instance of it and call reset. This forces it to attempt to produce the current URL. To go to a page you build a hyper link to it such as <a href="/about">go to about page</a>. All links are intercepted.
 
 ## Firebase and Reactivity
 

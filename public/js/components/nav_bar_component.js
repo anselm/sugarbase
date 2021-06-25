@@ -7,12 +7,7 @@ class NavBarComponent extends HTMLElement {
 		window.appstate.observe("currentParty",this.redraw.bind(this));
 	}
 
-	async redraw(){
-
-		setTimeout(this.redraw2.bind(this),10);
-	}
-
-	async redraw2() {
+	async redraw() {
 
 		let party = window.appstate.currentParty ? "party" : "login"
 
