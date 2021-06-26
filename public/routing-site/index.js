@@ -1,17 +1,17 @@
 
 // borrow the mobile style for this demo
 
-document.head.innerHTML += `<link type="text/css" rel="stylesheet" href="/styledsite/style/mobile/basic.css">`
+document.head.innerHTML += `<link type="text/css" rel="stylesheet" href="/styles-site/style/mobile/basic.css">`
 
 // app components
 
-import '/basicsite/services.js'
-import '/basicsite/components/nav-bar-component.js'
-import '/basicsite/pages/splash-page.js'
-import '/basicsite/pages/party-profile-page.js'
-import '/basicsite/pages/party-login-page.js'
-import '/basicsite/pages/party-signout-page.js'
-import '/sugarbase/generic-404-page.js'
+import './services.js'
+import './components/nav-bar-component.js'
+import './pages/splash-page.js'
+import './pages/party-profile-page.js'
+import './pages/party-login-page.js'
+import './pages/party-signout-page.js'
+import '/utils/sugarbase/generic-404-page.js'
 
 // routes
 
@@ -28,7 +28,7 @@ export let routes = (segments) => {
 	return "generic-404-page"
 }
 
-import {Router} from '/sugarbase/router.js'
+import {Router} from '/utils/sugarbase/router.js'
 
 let router = window.router = Router.new().push(routes)
 

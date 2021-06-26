@@ -2,13 +2,13 @@
 
 R1 Jan 2021
 
-SugarBase is a javascript minimalist framework for building SPA (single page app) websites. This framework is simpler than say preact or svlelte. No compilation phase is required, and I don't rely on the shadow dom.
+SugarBase is a javascript minimalist framework for building SPA (single page app) websites. This framework is simpler than say react, preact or svelte. No compilation phase is required, and I don't rely on the shadow dom, or a pre-parsing phase for html tags.
 
-This repository is organized as a series of separate standalone demos where arranged from very simple capabilities such as basic routing and pages to more opinionated approaches to supporting reactivity and observables in firebase to styling, css elements and mixing 2d and 3d elements together in a page layout in a performant way.
+This repository is organized as a series of separate standalone demos where arranged from very simple capabilities such as basic routing and pages to more opinionated approaches to supporting reactivity and observables in firebase to styling, css elements and mixing 2d and 3d elements together in a page layout.
 
 ---
 
-## SimpleSite Demo
+## routing-site demo
 
 This shows off a bare bones SPA framework example. It runs by default. To run this demo checkout the repo and run it like below and then visit the supplied url in a browser:
 
@@ -33,7 +33,7 @@ This layer shows a few key principles of this framework:
 
 ---
 
-## Firebase Demo
+## firebase-site demo
 
 This demo builds on top of the previous demo adding new capabilities - mainly using firebase to login a user and show observability and update display elements when there are state changes.
 
@@ -56,7 +56,7 @@ The demo here should allow you to login and log out and show the correct state a
 
 ---
 
-## Style
+## *styles-site*
 
 The style practice here is to have some global style elements that can be layered to apply to all objects. This is arranged like so:
 
@@ -82,19 +82,35 @@ The style practice here is to have some global style elements that can be layere
 	3. *tiling* -> various ways of arranging cards
 	4. *observable* -> efficiently updating displayed card lists based on state change on server
 
+TODO
+	- perhaps provide example app here of these
+	- Cards can be built out in more depth with various kinds of cards in more detail - see https://rebassjs.org/
+
+* *color/springtime* is a set of color choices that styles the above style sets
+
+* *color/warnings* colors for alerts and buttons to indicate safe and dangerous actions
+
+TODO perhaps provide example app here of layering these
+TODO add dark mode
+
 * *card-effects* for card related effects
 
 * *effect-general* various general transitions and effects
 
 * *effect-loading* a loading effect
 
-## Colors
+TODO
+	- I wouldn't mind exploring fun effects in far more depth;
+	- ie; recreate things like https://www.domestika.org/en/courses/1373-psychedelic-animation-with-photoshop-and-after-effect
 
-* *color/springtime* is a set of color choices that styles the above style sets
+	- Also may be worth just enumerating practical transitions and effects:
+	- also : https://www.youtube.com/watch?v=YHQ820W8FRw
 
-* *color/warnings* colors for alerts and buttons to indicate safe and dangerous actions
+---
 
-## Widgets
+## *fancy-components-site*
+
+Focusing on fancy ux components
 
 * *image loader* for adding images and sending them to a server
 
@@ -104,15 +120,33 @@ The style practice here is to have some global style elements that can be layere
 
 * *picker* for picking from say a bunch of cards and previewing a choice
 
-## Typical Site
+TODO add examples
 
-Here is a sketch of a typical full blown website with:
+---
+
+## *three-site*
+
+* *3d* for picking from 3d objects and snapshotting them as images
+
+* *3d map* for floating 3d objects on a map
+
+TODO add examples
+
+---
+
+## *cms-site*
+
+Here is a sketch of a typical full blown data driven back end content management website with:
 
 	1. A splash page
 	2. Login
 	3. Logout
 	4. A logged in home page of some kind that enumerates powers
-	5. Content page; show a list of content that was created and allow sorting
-	6. Content Creation / Edit page; create a new content.
+	5. Content page; show a list of content that was created and allow sorting; using card layouts
+	6. Content Creation / Edit page; create a new content, including images.
 	7. Content detail; examine a content and possibly delete it.
+	8. Upload images
+	9. Layout collections
+
+TODO build
 

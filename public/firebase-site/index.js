@@ -1,12 +1,7 @@
 
-// css - you may want to statically declare these in header to reduce flickering
+// build on top of the routing demo
 
-let url = "https://www.gstatic.com/firebasejs/ui/4.8.0/firebase-ui-auth.css"
-document.head.innerHTML += `<link type="text/css" rel="stylesheet" href="${url}">`
-
-// use some basic site parts
-
-import '/basicsite/basicsite.js'
+import '/routing-site/basicsite.js'
 
 // but revise these bits and pieces
 
