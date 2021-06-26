@@ -4,13 +4,13 @@ R1 Jan 2021
 
 SugarBase is a javascript minimalist framework for building SPA (single page app) websites. This framework is simpler than say preact or svlelte. No compilation phase is required, and I don't rely on the shadow dom.
 
-This repository is organized as a series of separate standalone demos arranged from very simple capabilities such as basic routing and pages to more opinionated approaches to supporting reactivity and observables in firebase to styling, css elements and mixing 2d and 3d elements together in a page layout in a performant way.
+This repository is organized as a series of separate standalone demos where arranged from very simple capabilities such as basic routing and pages to more opinionated approaches to supporting reactivity and observables in firebase to styling, css elements and mixing 2d and 3d elements together in a page layout in a performant way.
 
 ---
 
 ## SimpleSite Demo
 
-This shows off a Bare Bones SPA framework example. It runs by default. To run this demo checkout the repo and run it like below and then visit the supplied url in a browser:
+This shows off a bare bones SPA framework example. It runs by default. To run this demo checkout the repo and run it like below and then visit the supplied url in a browser:
 
 	npm update
 	npm start
@@ -56,8 +56,63 @@ The demo here should allow you to login and log out and show the correct state a
 
 ---
 
-## Styled demo
+## Style
 
-Im earlier demos I do use a concept of "class hidden" but otherwise this framework did not provide much support for style, input and responsiveness.  Here I present some opinions on handling inputs and styling outputs with CSS.
+The style practice here is to have some global style elements that can be layered to apply to all objects. This is arranged like so:
 
-My own practice is to have a few different CSS files, one for absolute bare bones global elements, and then a few for differences that are increasingly specialized. This way I can layer CSS together to produce a final effect. I also have some opinions around button styles more complex form handling.
+* *mobile/basic* is a minimalist style foundation with these features:
+
+	1. *large font* -> headers; tends to be somewhat idiomatic and "on brand" showing character of site
+	2. *small font* -> content with an emphasis on legibility
+	3. *navbar* -> a separate element that I tend to prefer to show on all screens for a consistent look
+	4. *page* -> a backdrop for centering; I tend to allow overflow:auto
+	5. *subpage* -> a centered column for all content, typically 800px wide; I tend to force room for nav bar
+	6. *color* -> is not set at this level; default colors are used
+
+* *bigform* bold large style inputs and buttons for capturing user input
+
+	1. *buttons*
+	2. *input* -> for inputting text
+	3. *radio* -> radio and other buttons are not provided
+
+* *cards* for card centric layout styles - with these features:
+
+	1. *sizes* -> from tiny to large
+	2. *role* -> visual hints to indicate if interactive or passive or if a primary call out or a response
+	3. *tiling* -> various ways of arranging cards
+	4. *observable* -> efficiently updating displayed card lists based on state change on server
+
+* *card-effects* for card related effects
+
+* *effect-general* various general transitions and effects
+
+* *effect-loading* a loading effect
+
+## Colors
+
+* *color/springtime* is a set of color choices that styles the above style sets
+
+* *color/warnings* colors for alerts and buttons to indicate safe and dangerous actions
+
+## Widgets
+
+* *image loader* for adding images and sending them to a server
+
+	1. *preview*
+	2. *send to firebase* -> implementation of actually storing in firebase (firestore)
+	3. *generate different scales* -> i like to generate all of the different preview sizes on client
+
+* *picker* for picking from say a bunch of cards and previewing a choice
+
+## Typical Site
+
+Here is a sketch of a typical full blown website with:
+
+	1. A splash page
+	2. Login
+	3. Logout
+	4. A logged in home page of some kind that enumerates powers
+	5. Content page; show a list of content that was created and allow sorting
+	6. Content Creation / Edit page; create a new content.
+	7. Content detail; examine a content and possibly delete it.
+

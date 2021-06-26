@@ -1,0 +1,30 @@
+.good {
+  color: green;
+  background-color:#e0ffe0  
+}
+
+.warning {
+  color: orange;
+  background-color:#ffffe0
+}
+
+.bad {
+  color: red;
+  background-color:#ffe0e0
+}
+
+.danger {
+  color:red;
+  background-color:#ffe0e0  
+}
+
+.problem {
+  color:red;
+  background-color:#ffe0e0  
+}
+
+.cancel {
+  border-color: grey;
+  background-color:#e0e0e0
+}
+

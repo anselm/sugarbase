@@ -1,0 +1,70 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Cantarell&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+/* @import url('https://fonts.googleapis.com/css2?family=Lora&display=swap'); */
+
+:root {
+	--sugarnavheight:40px;
+	--sugarcontentwidth:800px;
+	--sugarcontentpadding:8px;
+	--sugarcontentmargin:8px;
+	--sugarcontentpadding:4px;
+}
+
+html,body,div,span,img,input,textarea,button,canvas,a,h1,h2,h3,p {
+	font-family: 'Lato';  
+	border: 0px;
+	margin: 0px;
+	padding: 0px;
+	outline: none;
+	text-decoration: none;
+	box-sizing: border-box;
+	word-break: break-word;
+}
+
+p, div, input, textarea {
+	font-family: 'Cantarell', sans-serif;
+}
+
+.underline { text-decoration: none; }
+
+.underline:hover { text-decoration: underline; }
+
+.hidden: {display: none }
+
+.sugar-nav {
+	width: var(--sugarcontentwidth);
+	margin-left:auto;
+	margin-right:auto;
+	height: var(--sugarnavheight);
+	font-size:2em;
+	display: block;
+}
+
+.sugar-page {
+	width:100%;
+	height:100%;
+	overflow:auto;
+	display:block;
+}
+
+.sugar-content {
+	display:block;
+	box-sizing: border-box;
+	width:var(--sugarcontentwidth);
+	margin-left:auto;
+	margin-right:auto;
+	height:100%;
+	margin-top:var(--sugarcontentmargin);
+	margin-bottom:var(--sugarcontentmargin);
+	padding:var(--sugarcontentpadding);
+	font-size:2em;
+}
+
+@media screen and (max-width:800px) {
+	.sugar-content {
+		width:100%;
+	}
+}

@@ -1,10 +1,8 @@
-
 class PartySignoutPage extends HTMLElement {
 	connectedCallback() {
-		this.className="page"
+		this.className="sugar-page"
 		this.innerHTML =
-			`
-			<div class='subpage' style="background:rgba(255,255,255,0.7);font-size:2em;">
+			`<div class='sugar-content'>
 				<h1>You have been signed out</h1>
 				<br/>
 				Actions you may take here:
@@ -12,13 +10,10 @@ class PartySignoutPage extends HTMLElement {
 					<li><a href="/">return to home page</a>
 					<li><a href="/login">go to login</a>
 				</ul>
-			</div>
-			`
-
+			</div>`
 		Services.signout()
 	}
 }
-
 customElements.define('party-signout-page', PartySignoutPage )
 
 

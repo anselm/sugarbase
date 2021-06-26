@@ -1,0 +1,61 @@
+
+/* fundamentals */
+
+body {
+  background:#f8f4ff;
+}
+
+button {
+	background:white;	
+}
+
+a, h1, h2, h3 {
+	color:purple;
+}
+
+/* basic mobile styling */
+
+.sugar-nav, .sugar-nav-shadow {
+	background:white;
+}
+
+.sugar-page {
+	background:white;
+}
+
+.sugar-content {
+}
+
+/* card styling */
+
+.sugar-card {
+	background:white;
+}
+
+.sugar-card-medium {
+	border:1px solid grey;
+}
+
+.sugar-card-line {
+	border:1px solid purple;
+}
+
+.sugar-card-respond {
+	border:2px dotted purple;
+}
+
+.sugar-card-sigil {
+	border: 3px solid #c5aede;
+}
+
+/* button styling */
+
+.sugar-button {
+	background:white;	
+	border:3px solid plum;
+}
+
+.sugar-input {
+	border:3px solid plum;
+}
+

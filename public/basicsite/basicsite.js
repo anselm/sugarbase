@@ -1,7 +1,7 @@
 
-// css - you may want to statically declare these in header to reduce flickering
+// borrow the mobile style for this demo
 
-document.head.innerHTML += `<link type="text/css" rel="stylesheet" href="/basicsite/common.css">`
+document.head.innerHTML += `<link type="text/css" rel="stylesheet" href="/styledsite/style/mobile/basic.css">`
 
 // app components
 
@@ -37,6 +37,7 @@ let router = window.router = Router.new().push(routes)
 export async function run() {
 
 	// set app name
+
 	Services.set({appName:"basicsite"})
 
 	// nav bar

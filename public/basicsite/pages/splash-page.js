@@ -1,16 +1,10 @@
-
 class SplashPage extends HTMLElement {
-
 	connectedCallback() {
-
-		this.className="page"
-
+		this.className="sugar-page"
 		let party = Services.currentParty
 		let moniker = party ? party.displayName : 0
-
 		this.innerHTML =
-			`
-			<div class='subpage' style="background:rgba(255,255,255,0.7);font-size:2em;">
+			`<div class='sugar-content'>
 				<h1>Hello World!</h1>
 				<br/>
 				Actions you may take here:
@@ -20,10 +14,7 @@ class SplashPage extends HTMLElement {
 					<li style="display:${moniker?"normal":"none"}"><a href="/signout">go to signout</a>
 				</ul>
 				<font color="white">Login Status: ${moniker}</font>
-			</div>
-			`
+			</div>`
 	}
-
 }
-
 customElements.define('splash-page', SplashPage )

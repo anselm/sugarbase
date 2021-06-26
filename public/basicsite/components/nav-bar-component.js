@@ -8,22 +8,15 @@ class NavBarComponent extends HTMLElement {
 	}
 
 	connectedCallback() {
+//		super.connectedCallback()
 
 		let option = Services.currentParty ? "signout" : "login"
-
-		this.style="width:100%;height:40px"
-
-		let childstyle=`
-			background:rgba(235,235,255,0.7);
-			font-size:2em;
-    		`
+		this.className = "sugar-nav"
 
 		this.innerHTML =
-			`<div class='subpage' style="${childstyle}">
-				<a href="/">/Home</a>
-				${Services.appName}
-				<a style="float:right" href="/${option}">/${option}</a>
-			</div>
+			`<a href="/">/Home</a>
+			${Services.appName}
+			<a style="float:right" href="/${option}">/${option}</a>
 			`
 
 		if(!this.latch)
@@ -34,5 +27,4 @@ class NavBarComponent extends HTMLElement {
 
 }
 
-customElements.define('nav-bar-component', NavBarComponent )
-
+customElements.define('nav-bar-component', NavBarComponent ) //, {extends: 'div'} )

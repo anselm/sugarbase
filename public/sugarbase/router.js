@@ -31,7 +31,8 @@ export class Router {
 		this.routes = {}
 		this.reverse = {}
 
-		// can hammer in a css style if desired
+		// this is the way that pages are hidden or shown
+		// pages typically are built after this is installed so there shouldn't be any flickering
 		if(buildstyle) {
 			var style = document.createElement('style');
 			style.type = 'text/css';

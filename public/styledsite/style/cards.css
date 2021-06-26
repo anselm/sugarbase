@@ -1,0 +1,39 @@
+/* cards themselves */
+
+.card {
+	box-shadow: 3px 3px 10px 0 rgba(0,0,0,0.35);
+}
+
+.card-tiny {
+	box-shadow: 3px 3px 10px 0 rgba(0,0,0,0.35);
+}
+
+.card-small {
+	box-shadow: 3px 3px 10px 0 rgba(0,0,0,0.35);
+}
+
+.card-medium {
+	box-shadow: 3px 3px 10px 0 rgba(0,0,0,0.35);
+}
+
+.card-large {
+	box-shadow: 3px 3px 10px 0 rgba(0,0,0,0.35);
+}
+
+.card-banner {
+	box-shadow: 3px 3px 10px 0 rgba(0,0,0,0.35);
+}
+
+/* elements floating within cards */
+
+.card-sigil {
+	box-shadow:5px 7px rgba(0.1,0.1,0.1,0.1);
+}
+
+.card-emoji {
+	box-shadow:5px 5px rgba(0.1,0.1,0.1,0.1);
+}
+
+.card-response {
+	box-shadow:3px 3px 5px rgba(0,0,0,0.25);
+}
