@@ -1,12 +1,5 @@
-///
-/// Typically a developer will have some application state somewhere... here are some of my practices:
-///
-/// I like to make that state a global resource
-/// I tend to also not mix display and control (MVC pattern). This layer should not know HTML exists as a concept at all.
-/// I often do my own reactivity scheme; this here is just an example; https://mobx.js.org is also nice.
-///
 
-window.appstate = {
+window.Services = {
 
 	realstate:{},
 	observers:{},

@@ -2,68 +2,46 @@
 
 R1 Jan 2021
 
-SugarBase is a javascript framework for SPA apps with these features:
+SugarBase is a javascript minimalist framework for building SPA (single page app) websites. This framework is simpler than say preact or svlelte. No compilation phase is required, and I don't rely on the shadow dom.
 
-1. Not reactive.
-2. Does not need to be compiled; is pure js.
-3. "Pages" are pure HTMLElements where you have to write all your layout yourself.
-4. Router routes between registered pages, showing only one page at a time.
-5. Router intercepts all hyperlink clicks and switches to the relevant page.
-6. Router uses "/" paths rather than "#" paths.
-7. Router decorates page with "hidden" css class rather than relying on element.visible which doesn't always work
-
-There are three separate demos here:
-
-1. Demo 1 -> delivering a basic SPA service
-2. Demo 2 -> delivering some opinions around handling input forms, table layouts and CSS style.
-3. Demo 3 -> delivering opinions around integration with Firebase and reactivity overall
+This repository is organized as a series of separate standalone demos arranged from very simple capabilities such as basic routing and pages to more opinionated approaches to supporting reactivity and observables in firebase to styling, css elements and mixing 2d and 3d elements together in a page layout in a performant way.
 
 ---
 
-## Demo #1 - getting started
+## SimpleSite Demo
 
-Here's how to run this demo:
+This shows off a Bare Bones SPA framework example. It runs by default. To run this demo checkout the repo and run it like below and then visit the supplied url in a browser:
 
-git checkout ...
-cd into the folder
-npm update
-npm start [mode:nothing,css,firebase]
+	npm update
+	npm start
 
-And here's a running example that should be stable on the net for a while
+Here's a running example:
 
-https://sugarbase-example.glitch.me/
+	https://sugarbase-example.glitch.me/
 
-### Demo #1: The concept of "Pages"
+This layer shows a few key principles of this framework:
 
-SugarBase only shows one "page" at a time and hides the rest. See /public/js/pages for examples.
+1. *Pages*. A SPA website typically shows one page at a time and switches between them. A page is simply an HTMLElement that is registered with the router. A page has 3 opportunities to paint its content. There is the constructor() which has some limits (see https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements) and there is also connectedCallback() which is invoked by the DOM when a node is added to the scene. And there is an optional method componentWillShow() that I provide (via the router) whenever the page is about to be foregrounded. There's no built-in observer pattern or react pattern provided by default, nor any shadow dom usage or so on. * Note that it's arguable if componentWillShow() is the best pattern (because it is a new method and then this diverges from vanilla HTMLElement) and another way to do this would be to use a MutationObserver but that gets bulky.
 
-SugarBase does not have any reactive features built in - pages and page contents don't get "triggered" or "refreshed" or "updated" in the background by any state change.
+2. *Router*. The developer has to register a router.use(handler) to resolve a user specified url.
 
-HTMLElements in pure javascript are used to represent a page. This is largely built in to modern browsers and although there is a bit of extra extension support with componentWillShow() this is otherwise largely vanilla. 
+3. *Observing state change*. I do very little in terms of repainting changes to state. In this first demo I do update one element (a nav bar) dynamically based on if a (pretend) user is logged in or not but the source code for this responsiveness is visible in the app.  Note that MobX is also a good choice and there are many observability bindings out there in the wild that are quite nice that developers can use.
 
-### Demo #1: Components
+4. *Webpack*. I tacked in webpack although you'll have to specifically cite the bundle produced - just to show that this can be packed a bit. It is important to do this because websites can be noticably slow otherwise. In general I do try to get the first page up ASAP and I don't pre-load other pages - but it can take a while before the DOM is ready with many separate file loads.
 
-Fragments are also HTMLElements... there is nothing magical about them. Use at will. See /public/js/components for examples.
-
-### Demo #1: Routing
-
-Routing is the cornerstone of the app. To start the router make an instance of it and call reset. This forces it to attempt to produce the current URL. To go to a page you build a hyper link to it... all links are intercepted. The router itself is at /public/js/router.js ... typically I include it in index.html and then I register my pages with it. Also you need to register custom routes
-
-Note that it's a design choice that all routes are evaluated by route.use( yourfunction ). I personally enjoy having short form routes that resolve on dynamic database queries rather than static routes such as /username instead of /user?name=blah . It can take a bit of design thinking about your routes overall because there is more possibility of collision of namespaces when you do this but but it is a nicer experience for the user.
-
-### Demo #1: Reactions to state change
-
-For Demo 1 I do very little in terms of repainting changes to state. I only update the nav bar dynamically based on if a user is logged in or not. I have a small observer capability built directly into business_logic.js in the js folder. Note that MobX is also a good choice and there are many observability bindings out there in the wild as well that are quite nice - and fancier that what I am doing - you can also switch to those.
-
-### Demo #1: Webpack
-
-I tacked in webpack although you'll have to specifically cite the bundle produced - just to show that this can be packed a bit. It is important to do this because websites can be noticably slow otherwise. In general I do try to get the first page up ASAP and I don't pre-load other pages - but it can take a while before the DOM is ready with many separate file loads.
+5. *No compilation required*. It doesn't require compilation (if you don't use webpack).
 
 ---
 
-## Demo 2: Firebase 
+## Firebase Demo
 
-For this demo I now integrate with firebase and provide a bit richer examples of observability / reactions. Of course painting the correct state is a highly desirable quality in web frameworks. But often state can change often and it can be a hassle to repaint a page. Traditional systems such as React use tools like Redux and then use the shadow DOM and look for deltas or differences between what is presented and what is not presented to repaint the layout on changes. A main point of this SPA system is that I do this somewhat more directly in code rather than with wrappers.
+This demo builds on top of the previous demo adding new capabilities - mainly using firebase to login a user and show observability and update display elements when there are state changes.
+
+To run this tack on ?demo=firebase onto the URL - for example:
+
+	https://localhost:5000?demo=firebase
+
+Of course painting the correct state is a highly desirable quality in web frameworks. Systems such as React use tools like Redux and then use the shadow DOM to effectively maintain a change list for what to repaint. Tools like MobX are a nicer alternative to Redux in some ways as well for this chore. The Svelte framework compiles your source so that it understands exactly where changes may occur. Here I push the labor to somewhat to the developer; providing some observer like abilities but requiring a developer to apply them to the right DOM elements.
 
 You'll need to to some additional setup:
 
@@ -74,17 +52,63 @@ You'll need to to some additional setup:
 	5. "firebase init" on the command line
 	6. "firebase deploy" or "firebase serve" to run the service locally
 
-This should now support proper login backed by the cloud.
+The demo here should allow you to login and log out and show the correct state at all times.
 
 ---
 
-## Demo 3: Handling Input and Style with reactivity
+## Styled demo
 
 Im earlier demos I do use a concept of "class hidden" but otherwise this framework did not provide much support for style, input and responsiveness.  Here I present some opinions on handling inputs and styling outputs with CSS.
 
 My own practice is to have a few different CSS files, one for absolute bare bones global elements, and then a few for differences that are increasingly specialized. This way I can layer CSS together to produce a final effect. I also have some opinions around button styles more complex form handling.
 
-Also, it is important to handle database state change events gracefully, although this is not style related per se, now that we have firebase integration we can fairly easily have a beautiful responsive data driven website with a variety of kinds of forms and lists that are presented with nice visuals.
+# Notes
+
+- how can multiple demos co - exist 
+
+- how can i bake static pages out
+
+- can i make firebase use my server? does it matter?
+
+
+index.html
+
+	<javascript>
+		import js/sugarbase/router.js  <- maybe everything is a 'component' even if not an html element
+		import js/demo1/index.js
+
+
+
+	- absolutely minimal
+
+	- import library/router.js
+
+	- import js/demos.js -> a component in userland 
+
+		- on demand it would
+
+		- import js/demo1.js  <- maybe replace itself with that
+
+
+	- i can turn the router into a component; and specify a path or resolver on components
+	- make the router component by hand with document.createElement
+	- put everything into component folder
+
+	- maybe i can use the ordinary dom to do that
+
+	- i can maybe load up whichever demo you chose from the home page; have js load different things up
+	- 
+
+	- 
+
+/public/
+	/js/
+		/components
+		/
+
+Organization. How can I have multiple separate demos in one folder in such a way that they are organized separately on disk, but then also overlaid together into a stack of capabilities built up on top of each other? I am currently trying having multiple public folders, but this results in code duplication.
+
+
 
 
 

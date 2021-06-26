@@ -6,6 +6,6 @@
 	"start_url": "/",
 	"display": "standalone",
 	"orientation": "portrait",
-	"icons": [{"src": "art/sugarbase.png","sizes": "192x192","type": "image/png" }],
+	"icons": [{"src": "/art/cube192x192.png","sizes": "192x192","type": "image/png" }],
 	"theme_color": "#B71C1C"
 }

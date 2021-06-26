@@ -1,6 +1,6 @@
 
 class PartySignoutPage extends HTMLElement {
-	componentWillShow() {
+	connectedCallback() {
 		this.className="page"
 		this.innerHTML =
 			`
@@ -10,16 +10,15 @@ class PartySignoutPage extends HTMLElement {
 				Actions you may take here:
 				<ul>
 					<li><a href="/">return to home page</a>
-					<li><a href="/party/login">go to login</a>
+					<li><a href="/login">go to login</a>
 				</ul>
 			</div>
 			`
 
-		window.appstate.signout()
+		Services.signout()
 	}
 }
 
 customElements.define('party-signout-page', PartySignoutPage )
 
-router.add("signout", "party-signout-page")
 

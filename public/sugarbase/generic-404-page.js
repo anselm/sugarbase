@@ -7,4 +7,3 @@ class Generic404Page extends HTMLElement {
 
 customElements.define('generic-404-page', Generic404Page )
 
-router.add("404", "generic-404-page")

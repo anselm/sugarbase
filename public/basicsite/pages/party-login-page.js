@@ -1,6 +1,6 @@
 
 class PartyLoginPage extends HTMLElement {
-	componentWillShow() {
+	connectedCallback() {
 		this.className="page"
 		this.innerHTML =
 			`
@@ -9,17 +9,15 @@ class PartyLoginPage extends HTMLElement {
 				<br/>
 				Actions you may take here:
 				<ul>
-					<li><a href="/">go to home page</a>
-					<li><a href="/party">go to your page</a>
-					<li><a href="/party/signout">go to signout</a>
+					<li><a href="/">go to splash page</a>
+					<li><a href="/profile">go to your profile page</a>
+					<li><a href="/signout">go to signout</a>
 				</ul>
 			</div>
 			`
-		window.appstate.login()
+		Services.login()
 	}
 }
 
 customElements.define('party-login-page', PartyLoginPage )
-
-router.add("login", "party-login-page")
 

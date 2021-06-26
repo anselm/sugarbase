@@ -11,5 +11,3 @@ class Generic402Page extends HTMLElement {
 }
 
 customElements.define('generic-402-page', Generic402Page )
-
-router.add("402", "generic-402-page")
