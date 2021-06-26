@@ -1,6 +1,10 @@
 
-class PartyLoginPage extends HTMLElement {
-	componentWillShow() {
+import "https://www.gstatic.com/firebasejs/ui/4.8.0/firebase-ui-auth.js"
+
+class PartyLoginFirebasePage extends HTMLElement {
+
+	connectedCallback() {
+
 		this.className="page"
 		this.innerHTML =
 			`<div class='subpage' style="background:rgba(255,255,255,0.7);font-size:2em;">
@@ -48,17 +52,16 @@ class PartyLoginPage extends HTMLElement {
 			],
 		}
 
-		if(!window.appstate.currentParty && !this.latch) {
-			this.latch = 1
-			var ui = new firebaseui.auth.AuthUI(firebase.auth())
-			ui.start('#firebaseui-auth-container', uiConfig )
+		if(!this.ui) {
+			this.ui = new firebaseui.auth.AuthUI(firebase.auth())
+		}
+		if(!Services.currentParty) {
+			this.ui.start('#firebaseui-auth-container', uiConfig )
 		}
 
 	}
 
 }
 
-customElements.define('party-login-page', PartyLoginPage )
-
-router.add("login", "party-login-page")
+customElements.define('party-login-firebase-page', PartyLoginFirebasePage )
 

@@ -88,12 +88,22 @@ export class Router {
 	}
 
 	///
-	/// Add a handler to the list of handlers to try to resolve a url change
+	/// Append a handler to the list of handlers to try to resolve a url change
 	///
 
-	use(handler) {
+	push(handler) {
 		if(!this.handlers) this.handlers = []
 		this.handlers.push(handler)
+		return this
+	}
+
+	///
+	/// Prepend a handler to the list of handlers to try to resolve a url change
+	///
+
+	unshift(handler) {
+		if(!this.handlers) this.handlers = []
+		this.handlers.unshift(handler)
 		return this
 	}
 
@@ -265,31 +275,6 @@ export class Router {
 
 }
 
-	// document.body.innerHTML = `<link type="text/css" rel="stylesheet" href="/basicsite/common.css">`
-
-let LoadCSS2 = (url) => {
-	return new Promise((resolve, reject) => {
-		let link = document.createElement("link");
-		link.setAttribute("rel", "stylesheet");
-		link.setAttribute("type", "text/css");
-		link.onload = resolve
-		link.setAttribute("href", url);
-		link.href = url;
-		document.head.appendChild(link);
-	});
-}
-
-export async function LoadCSS(urls=[],settletime=100){
-	return new Promise((resolve, reject)=>{
-		Promise.all(urls.map(async url => await LoadCSS2(url))).then(()=>{
-			setTimeout(()=>{
-				resolve()
-			},settletime)
-		})
-	})
-}
-
-
 /*
 ///
 /// a simple router that only routes single paths
@@ -320,14 +305,14 @@ export class RouterComponent extends HTMLElement {
 		if(this.children.length) {
 			let kind = this.children[0].tagName.toLowerCase()
 			// for zero length urls return this kind
-			router.use((segments)=>{
+			router.append((segments)=>{
 				if(segments && segments.length && segments[0].length) return 0
 				return kind;
 			})
 		}
 
 		// rest will route as needed by simple paths if found
-		router.use((segments)=>{
+		router.append((segments)=>{
 			if(!segments || segments.length != 1 || segments[0].length<1) return 0
 			let route = router.routes[segments[0]]
 			if(!route) return 0
@@ -335,7 +320,7 @@ export class RouterComponent extends HTMLElement {
 		})
 
 		// error handler
-		router.use(()=> {
+		router.append(()=> {
 			return "generic-404-page"
 		})
 

@@ -5,7 +5,8 @@ class SplashPage extends HTMLElement {
 
 		this.className="page"
 
-		let moniker = Services.currentParty ? Services.currentParty.displayName : 0
+		let party = Services.currentParty
+		let moniker = party ? party.displayName : 0
 
 		this.innerHTML =
 			`

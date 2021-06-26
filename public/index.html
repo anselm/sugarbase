@@ -39,7 +39,23 @@
 </html>
 
 <script type=module>
-document.addEventListener('DOMContentLoaded', () => {
-	import("/basicsite/index.js")	
+document.addEventListener('DOMContentLoaded', async () => {
+
+	let url = new URL(location.href)
+	switch(url.searchParams.get('path')) {
+		case 'basic':
+		case 'basicsite':
+			{
+				let {run} = await import("/basicsite/basicsite.js")
+				run()
+			}
+			break
+		default:
+			{
+				let {run} = await import("/firebasesite/firebasesite.js")
+				run()
+			}
+	}
+
 });
 </script>

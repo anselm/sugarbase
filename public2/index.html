@@ -41,5 +41,9 @@
 
 <!-- jump to js and complete work there -->
 <script type=module>
+
+let params = new URL(location.href)
+console.log(params.searchParams.get('path'))
+
 import '/js/startup.js'
 </script>

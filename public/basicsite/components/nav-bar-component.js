@@ -4,6 +4,7 @@ class NavBarComponent extends HTMLElement {
 	constructor() {
 		super()
 		Services.observe("currentParty",this.connectedCallback.bind(this));
+		Services.observe("appName",this.connectedCallback.bind(this));
 	}
 
 	connectedCallback() {
@@ -20,6 +21,7 @@ class NavBarComponent extends HTMLElement {
 		this.innerHTML =
 			`<div class='subpage' style="${childstyle}">
 				<a href="/">/Home</a>
+				${Services.appName}
 				<a style="float:right" href="/${option}">/${option}</a>
 			</div>
 			`
