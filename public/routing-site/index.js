@@ -1,19 +1,11 @@
 
-// borrow the mobile style for this demo
+// sugar helpers
 
-document.head.innerHTML += `<link type="text/css" rel="stylesheet" href="/styles-site/style/mobile/basic.css">`
+import '/utils/sugarbase/sugar-element.js'
+import '/utils/sugarbase/sugar-404-page.js'
+import {Router} from '/utils/sugarbase/sugar-router.js'
 
-// app components
-
-import './services.js'
-import './components/nav-bar-component.js'
-import './pages/splash-page.js'
-import './pages/party-profile-page.js'
-import './pages/party-login-page.js'
-import './pages/party-signout-page.js'
-import '/utils/sugarbase/generic-404-page.js'
-
-// routes
+// app routes
 
 export let routes = (segments) => {
 	if(!segments || segments.length < 1 || segments[0].length==0) {
@@ -28,24 +20,46 @@ export let routes = (segments) => {
 	return "generic-404-page"
 }
 
-import {Router} from '/utils/sugarbase/router.js'
-
 let router = window.router = Router.new().push(routes)
 
-// start site
+// app pages
+
+import {NavBarComponent} from './components/nav-bar-component.js'
+import './pages/splash-page.js'
+import './pages/party-profile-page.js'
+import './pages/party-login-page.js'
+import './pages/party-signout-page.js'
+
+// app data model
+
+import './services.js'
+
+// start app
 
 export async function run() {
 
-	// set app name
+	// directly add nav bar and some state fiddling for example
 
-	Services.set({appName:"basicsite"})
-
-	// nav bar
-
-	document.body.appendChild(document.createElement("nav-bar-component"))
+	if(false) {
+		let nav = document.createElement("nav-bar-component")
+		document.body.appendChild(nav)
+		nav.title = "❤️"
+	} else {
+		let nav = new NavBarComponent({title:"😀😀😀"})
+		document.body.appendChild(nav)
+		nav.title = "❤️"
+	}
 
 	// start routing
 
 	window.router.reset();
 
+	// set app name as an example of global observers
+
+	Services.set({appName:"routing demo"})
+
 }
+
+// minimalist mobile friendly styling - just stuff this in right now - typically you should put it in index.html to reduce flickering
+
+document.head.innerHTML += `<link type="text/css" rel="stylesheet" href="/styles-site/style/mobile/basic.css">`

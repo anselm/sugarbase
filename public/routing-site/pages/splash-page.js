@@ -1,8 +1,8 @@
-class SplashPage extends HTMLElement {
+export class SplashPage extends HTMLElement {
 	connectedCallback() {
-		this.className="sugar-page"
 		let party = Services.currentParty
 		let moniker = party ? party.displayName : 0
+		this.className="sugar-page"
 		this.innerHTML =
 			`<div class='sugar-content'>
 				<h1>Hello World!</h1>

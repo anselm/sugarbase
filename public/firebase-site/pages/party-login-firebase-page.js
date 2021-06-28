@@ -17,8 +17,6 @@ class PartyLoginFirebasePage extends HTMLElement {
 			</div>
 			`
 
-		let authinfo = this.querySelector("#firebaseui-auth-container")
-
 		var uiConfig = {
 			credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
 			tosUrl: '/terms',

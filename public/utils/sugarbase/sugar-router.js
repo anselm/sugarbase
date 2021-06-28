@@ -33,12 +33,12 @@ export class Router {
 
 		// this is the way that pages are hidden or shown
 		// pages typically are built after this is installed so there shouldn't be any flickering
-		if(buildstyle) {
-			var style = document.createElement('style');
-			style.type = 'text/css';
-			style.innerHTML = '.hidden { display: none; }';
-			document.getElementsByTagName('head')[0].appendChild(style);
-		}
+		//if(buildstyle) {
+		//	var style = document.createElement('style');
+		//	style.type = 'text/css';
+		//	style.innerHTML = '.hidden { display: none; }';
+		//	document.getElementsByTagName('head')[0].appendChild(style);
+		//}
 
 		// watch user navigation events
 		window.addEventListener("popstate", (e) => {
@@ -188,9 +188,9 @@ export class Router {
 				if(inst) {
 					inst.id = code
 					//inst.classList.add("hidden") <- must not hide because it messes up initial layouts!
-					this.producedNames[code] = inst
-					this.producedClasses[kind] = inst
-					document.body.appendChild(inst)
+					//this.producedNames[code] = inst
+					//this.producedClasses[kind] = inst
+					//document.body.appendChild(inst) <- lets defer adding till needed
 				}
 			}
 		}
@@ -205,11 +205,12 @@ export class Router {
 				// if we are switching to the same object and same url then do nothing - it is already visible
 			} else {
 				// otherwise hide previous and then notify
-				this.previous.classList.add("hidden")
-				this.previous.hidden = true
-				if(this.previous.componentDidHide instanceof Function) {
-					this.previous.componentDidHide()
-				}
+				this.previous.remove()
+				//this.previous.classList.add("hidden")
+				//this.previous.hidden = true
+				//if(this.previous.componentDidHide instanceof Function) {
+				//	this.previous.componentDidHide()
+				//}
 			}
 		}
 
@@ -223,20 +224,27 @@ export class Router {
 			let promise = inst.componentWillShow()
 			if(promise) {
 				promise.then( () => {
-					inst.classList.remove("hidden")
-					inst.hidden = false
+					//inst.classList.remove("hidden")
+					//inst.hidden = false
+					document.body.appendChild(inst)
 				})
 			} else {
-				inst.classList.remove("hidden")
-				inst.hidden = false
+				//inst.classList.remove("hidden")
+				//inst.hidden = false
+				document.body.appendChild(inst)
 			}
 		} else {
-			inst.classList.remove("hidden")
-			inst.hidden = false
+			//inst.classList.remove("hidden")
+			//inst.hidden = false
+			document.body.appendChild(inst)
 		}
 
-		// hammer on connected callback again TODO sloppy
-		inst.connectedCallback()
+		// hammer on connected callback again TODO sloppy <- obsolete now
+		//if(!inst.connectedCallback) {
+		//	console.log(inst)
+		//	alert("no callback")
+		//}
+		//inst.connectedCallback()
 
 	}
 

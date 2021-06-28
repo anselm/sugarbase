@@ -1,7 +1,7 @@
-class PartyProfilePage extends HTMLElement {
+export class PartyProfilePage extends HTMLElement {
 	connectedCallback() {
-		this.className="sugar-page"
 		let moniker = Services.currentParty ? Services.currentParty.displayName : 0
+		this.className="sugar-page"
 		this.innerHTML =
 			`<div class='sugar-content'>
 				<h1>You are ${moniker?"":"not"} logged in</h1>

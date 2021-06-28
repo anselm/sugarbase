@@ -13,8 +13,6 @@ window.Services = {
 			Object.defineProperty(scope,name,{
 				get: function() {
 					let value = scope.realstate[name]
-					console.log("returning")
-					console.log(value)
 					return value
 				},
 				set: function(value) {

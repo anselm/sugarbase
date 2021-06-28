@@ -1,4 +1,4 @@
-class PartySignoutPage extends HTMLElement {
+export class PartySignoutPage extends HTMLElement {
 	connectedCallback() {
 		this.className="sugar-page"
 		this.innerHTML =
