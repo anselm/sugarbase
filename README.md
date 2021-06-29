@@ -2,11 +2,11 @@
 
 R1 Jan 2021
 
-SugarBase is a transparent javascript minimalist framework for building SPA (single page app) websites. No compilation phase is required, and I don't rely on the shadow dom, or a pre-parsing phase for html tags. This is designed to be programmer friendly, and it is not as designerly friendly as other frameworks.
+SugarBase is a transparent javascript minimalist framework for building SPA (single page app) websites. No compilation phase is required, and I don't rely on the shadow dom, or a pre-parsing phase for html tags. This is designed to be programmer friendly (but) it is not as designerly friendly as other frameworks).
 
 ## Examples
 
-This repository is organized as a series of separate standalone demos where arranged from very simple capabilities such as basic routing and pages to more opinionated approaches to supporting reactivity and observables in firebase to styling, css elements and mixing 2d and 3d elements together in a page layout.
+This repository is organized as a series of separate standalone demos where arranged from very simple capabilities such as basic elements, observability and routing to more opinionated approaches to supporting reactivity and observables in firebase to styling, css elements and mixing 2d and 3d elements together in a page layout.
 
 ## Comparisons to React, Svelte and others
 
@@ -23,6 +23,7 @@ Of course it’s not hard to build web apps from scratch. If you stand back and 
 Here are a few links to a few deep dives on other frameworks and framework related issues if you are interested:
 
 	https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements
+	https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals
 	https://css-tricks.com/creating-a-custom-element-from-scratch/
 	https://lit-element.polymer-project.org/guide
 	https://dev.to/jfbrennan/custom-html-tags-4788
@@ -33,101 +34,108 @@ Here are a few links to a few deep dives on other frameworks and framework relat
 
 ## Basic Lifecycle
 
-1. New Component Types: New kinds of elements can be invented using an optional thin wrapper on HTMLElement. You're welcome to use observedAttributes() and attributeChangedCallback() but I tend to find them to be a fairly weak concept (cannot handle complex types, cannot set a value during construction, cannot set a default, cannot be modified) so instead we have a "defaults" concept and observers on that.
+1. New Element Types: New kinds of "components" or elements are declared either with HTMLElement or using an optional thin wrapper on HTMLElement:
 
-	<pre>
-		class MyWidget extends SugarElement {
+```javascript
+class MyWidget extends SugarElement {
 
-			// defaults
-			static defaults = { color:blue }
+	// 'state' is a special enumeration of local variables; anything statically defined here will trigger redraw events on change
+	state = { color:"blue" }
 
-			// props can show up here and are passed through to be stuffed into self with observer support
-			constructor(props) {
-				super(props)
-			}
+	// unlike HTMLElement.setAttribute() this framework strongly encourages passing any initialization you want in the constructor
+	constructor(state) {
+		super()
 
-			// this is invoked by the dom when an element is connected to display; rendering is up to you
-			connectedCallback() {
-				render()
-			}
+		// this.state starts off as a copy of this.prototype.state - you can tack on whatever you wish...
+	    this.state = { ...state, time: Date.now() }
+	}
 
-			// invoked on disconnect; such as a page being hidden
-			disconnectedCallback() {
-			}
+	// this is invoked by the dom when an element is connected to display
+	connectedCallback() {
+	}
 
-			// a state change observer on props
-			propChanged() {
-				this.render();
-			}
+	// invoked on disconnect; such as a page being hidden
+	disconnectedCallback() {
+	}
 
-			render() {
-				// rendering and strategies here are up to you
-				this.innerHTML = "your display"
-			}
+	// a state change observer on props
+	propChanged() {
+	}
+
+	render() {
+		// your job here is to describe a template and let the system actually paint the element
+		let time = new Date(this.state.time).toLocaleTimeString();
+		// there is no shadow dom implicitly nor is there an html`` or css`` style tagged template function
+		return `<span>{time}</span>`;
+	}
+}
+```
+
+2. Creation: Elements can be instanced from javascript or from html
+
+```javascript
+let elem = new MyWidget({color:”blue”});
+
+// or
+
+document.body.innerHTML=“<my-widget color=“blue”></my-widget>”
+```
+
+3. Observability: I strongly discourage using customElement observedAttributes() and attributeChangedCallback(). They cannot handle complex types, cannot set a value during construction, cannot set a default, and cannot be modified. They're an ill conceived concept that doesn't map well to a data driven app philosophy. Instead we use this.prototype.state and this.state instead to describe state and observability. This for example will force a redraw of a widget - and you should handle the application of color yourself in the render() method:
+
+```javascript
+let widget = new Widget({color:"blue"});
+widget.color = "red"
+```
+
+Note you cannot trigger an update from sub property change
+
+```javascript
+widget.palette.primary = "red"
+```
+
+4. General events / observing databases.
+
+Typically real applications are going to watch database state and be responsive to that (web apps tend to be multi participant with real time updates across the network to all participants). Also, almost always, there is a parent component that manages a list of elements; so the pattern isn't so much that an object wants to update itself, but rather it has some logic to specifically find and update children in itself - and the children don't have any particular awareness of database state. There are lots of ways to accomplish this pattern. For example:
+
+```javascript
+class DatabaseWidget extends SugarElement {
+	connectedCallback() {
+		// connected can be called more than once... up to you to decide how you want to deal with that
+		if(!this.observers) {
+			// in this example (using a hypothetical database wrapper) a full refresh of state is triggered
+			this.observers = Services.observe({table:"activity",kind:"post",offset:0,limit:10,orderby:"created"},(item)=>{
+				// - if this is a delete then try find child and delete
+				// - if this is an insert or update then search and see if children exist and make
+				// - pass item to child as a property to paint if desired
+			})
 		}
-	</pre>
+	}
+	disconnectedCallback() {
+		// sometimes it makes sense to stop observing if not visible; it's up to you
+		Services.stop(this.observers)
+	}
+	render() {
+		// sometimes it makes sense to not bother drawing if not attached to dom
+		if(!this.isConnected()) return
+	}
+}
+```
 
+5. Designerly: While this tool is programmer leaning, it does have some designer considerations. It should be possible for novice designers to use widgets built by programmers and assemble them fairly easily - if the developers are thoughtful. This is hopefully a reasonable container for a designer to work within:
 
-2. Creation: elements can be instanced from javascript or from html
-
-	let elem = new MyWidget({color:”blue”});
-
-	// or
-
-	document.body.innerHTML=“<my-widget color=“blue”></my-widget>”
-
-
-3. Observability
-
-	You can change trivial properties to force an event - at the moment this does not update attribute
-
-		let widget = new Widget({color:"blue"});
-		widget.color = "red"
-
-	You cannot trigger an update from sub property change
-
-		widget.palette.primary = "red"
-
-	These are separate from attributes at the moment - so this is unrelated to the above:
-
-		widget.setAttribute("color","red");
-
-	With a database wrapper such as firebase you can attach observers to system state change - but repainting is up to you
-
-	<pre>
-		class DatabaseWidget extends SugarElement {
-			connectedCallback() {
-				// connected can be called more than once... up to you to decide how you want to deal with that
-				if(!this.observers) {
-					// in this example (using a database wrapper) a full refresh of state is triggered
-					this.observers = Services.observe({table:"activity",kind:"post",offset:0,limit:10,orderby:"created"},(item)=>{
-						// - if this is a delete then try find child and delete
-						// - if this is an insert or update then search and see if children exist and make
-						// - pass item to child as a property to paint if desired
-					})
-				}
-			}
-			disconnectedCallback() {
-				// sometimes it makes sense to stop observing if not visible; it's up to you
-				Services.stop(this.observers)
-			}
-			render() {
-				// sometimes it makes sense to not bother drawing if not attached to dom
-				if(!this.isConnected()) return
-			}
-		}
-	</pre>
-
-	Widgets that expert programmers build can be then exposed to novice html designers:
-
-		<pre>
+```javascript
+	render() {
+		return `
 			<sugar-groups class="sugar-page">
 				<sugar-header></sugar-header>
 				<sugar-database-cards class="sugar-content" observe="groups">
-					<sugar-image-card>example</sugar-image-card>
+					<sugar-image-card>example to replace</sugar-image-card>
 				</sugar-database-cards>
 			</sugar->groups>
-		</pre>
+			`
+	}
+```
 
 
 ---
@@ -148,7 +156,7 @@ This shows off some simple elements such as cards and lists and loaders:
 
 ## *routing-site demo*
 
-This first demo is a bare bones SPA example. I use it to articulate several of the lifecycle events around component creation and rendering and event handling. To run this demo checkout the repo and run it like below and then visit the supplied url in a browser:
+This showcases a router as a bare bones SPA example. To run this demo checkout the repo and run it like below and then visit the supplied url in a browser:
 
 	npm update
 	npm start
@@ -157,22 +165,11 @@ Here's a running example:
 
 	https://sugarbase-example.glitch.me/
 
-Key principles here:
+This router puts some burden on the developer:
 
- - lifecycle -> articulate!
- - i find it is inexpresive to do conditional logic in html, basically might as well use js, so designers have to learn js
+1. *Pages*. A SPA website typically shows one page at a time and switches between them. A page is simply an HTMLElement that is registered with the router. The router attaches or detaches the page from the dom if it decides it is visible or not.
 
-This layer shows a few key principles of this framework:
-
-1. *Pages*. A SPA website typically shows one page at a time and switches between them. A page is simply an HTMLElement that is registered with the router. A page has 3 opportunities to paint its content. There is the constructor() which has some limits (see https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements) and there is also connectedCallback() which is invoked by the DOM when a node is added to the scene. And there is an optional method componentWillShow() that I provide (via the router) whenever the page is about to be foregrounded. There's no built-in observer pattern or react pattern provided by default, nor any shadow dom usage or so on. * Note that it's arguable if componentWillShow() is the best pattern (because it is a new method and then this diverges from vanilla HTMLElement) and another way to do this would be to use a MutationObserver but that gets bulky.
-
-2. *Router*. The developer has to register a router.use(handler) to resolve a user specified url.
-
-3. *Observing state change*. I do very little in terms of repainting changes to state. In this first demo I do update one element (a nav bar) dynamically based on if a (pretend) user is logged in or not but the source code for this responsiveness is visible in the app.  Note that MobX is also a good choice and there are many observability bindings out there in the wild that are quite nice that developers can use.
-
-4. *Webpack*. I tacked in webpack although you'll have to specifically cite the bundle produced - just to show that this can be packed a bit. It is important to do this because websites can be noticably slow otherwise. In general I do try to get the first page up ASAP and I don't pre-load other pages - but it can take a while before the DOM is ready with many separate file loads.
-
-5. *No compilation required*. It doesn't require compilation (if you don't use webpack).
+2. *Routing*. The developer has to evaluate the user url themselves and decide which page to show. Many frameworks try to provide regex style evaluators for url -> page mappings but these always end up being limited. For example I personally like to have routes based on database queries (so that a path can be a persons moniker - similar to Twitter).
 
 ---
 

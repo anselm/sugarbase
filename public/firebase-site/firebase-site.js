@@ -1,7 +1,7 @@
 
 // build on top of the routing demo
 
-import '/routing-site/basicsite.js'
+import '/routing-site/routing-site.js'
 
 // but revise these bits and pieces
 

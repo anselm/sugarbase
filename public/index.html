@@ -46,13 +46,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 		case 'firebase':
 		case 'basicsite':
 			{
-				let {run} = await import("/firebase-site/index.js")
+				let {run} = await import("/firebase-site/firebase-site.js")
 				run()
 			}
 			break
 		default:
 			{
-				let {run} = await import("/elements-site/index.js")
+				let {run} = await import("/elements-site/elements-site.js")
 				run()
 			}
 	}

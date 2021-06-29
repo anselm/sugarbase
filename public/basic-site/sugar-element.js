@@ -1,3 +1,8 @@
+
+///
+/// An abstract base class with some helpful features
+///
+
 class SugarElement extends HTMLElement {
 
 	constructor(props={},element_name=0,element_class=0) {
@@ -17,7 +22,9 @@ class SugarElement extends HTMLElement {
 		if(this.constructor.observedAttributes) {
 			this.constructor.observedAttributes.forEach(key => {
 				Object.defineProperty(this, key, {
-					get() { return this.getAttribute(key) },
+					get() {
+						return this.getAttribute(key)
+					},
 					set(value) {
 						if (value) {
 							this.setAttribute(key,value)
@@ -29,14 +36,28 @@ class SugarElement extends HTMLElement {
 			})
 		}
 
-		// set props
+		// set props - todo arguably could deep clone
 		this.props = props
 
-		// observe changes
+		// set to defaults only if props are not set and if defaults exist
+		if(this.constructor.defaults) {
+			Object.entries(this.constructor.defaults).forEach(([key,val])=>{
+				// set default if prop not set
+				if(props.hasOwnProperty(key)) {
+					//this.props[key]=props[key]
+				} else {
+					this.props[key]=val
+				}
+			})
+		}
+
+		// attach observers if defaults exist
 		if(this.constructor.defaults) {
 			Object.entries(this.constructor.defaults).forEach(([key,val])=>{
 				Object.defineProperty(this, key, {
-					get() { return this.props[key] },
+					get() {
+						return this.props[key]
+					},
 					set(value) {
 						this.props[key]=value
 						this.propChanged(key,value)

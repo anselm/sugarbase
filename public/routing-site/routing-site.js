@@ -32,7 +32,7 @@ import './pages/party-signout-page.js'
 
 // app data model
 
-import './services.js'
+import '/data-site/services.js'
 
 // start app
 
