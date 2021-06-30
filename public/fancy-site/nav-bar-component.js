@@ -7,8 +7,8 @@ export class NavBarComponent extends SugarElement {
 
 	constructor() {
 		super()
-		Services.observe("currentParty",this.connectedCallback.bind(this));
-		Services.observe("appName",this.connectedCallback.bind(this));
+		Services.state.observe("currentParty",this.connectedCallback.bind(this));
+		Services.state.observe("appName",this.connectedCallback.bind(this));
 	}
 
 	connectedCallback() {
@@ -25,14 +25,15 @@ export class NavBarComponent extends SugarElement {
 
 	render() {
 		console.log("********** drawing nav **********")
-		let option = Services.currentParty ? "signout" : "login"
+		let option = Services.state.currentParty ? "signout" : "login"
 		let title = this.title ? this.title : "💣💣💣"
-		this.className = "sugar-nav"
 		this.innerHTML =
-			`<a href="/">/Home</a>
-			${Services.appName} ${title}
+			`<sugar-nav>
+			<a href="/">/Home</a>
+			${Services.state.appName} ${title}
 			<a style="float:right" href="/${option}">/${option}</a>
-			`
+			</sugar-nav>`
+
 		if(!this.latch)
 		this.children[0].animate([ {opacity:0}, {opacity:1}], 1500);
 		this.latch = 1

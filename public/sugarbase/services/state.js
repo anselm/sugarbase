@@ -1,7 +1,7 @@
 
 /// a rudimentary concept of state and observers
 
-export default let state = {
+export let state = {
 	realstate:{},
 	observers:{},
 	observerid:0,

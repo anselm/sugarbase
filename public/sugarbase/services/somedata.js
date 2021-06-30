@@ -1,15 +1,15 @@
 /// stuff some fake data into db
 
-export default async function populate(db) {
+export async function somedata(db) {
 
-	let george = await services.db.post({
+	let george = await db.post({
 		table:"party",
 		title:"Blake Jenkins",
 		image:"https://upload.wikimedia.org/wikipedia/en/9/91/George_%28novel%29.jpg",
 		id:1000,
 	})
 
-	await services.db.post({
+	await db.post({
 		table:"event",
 		title:"Walking in the rain on Ganymede",
 		image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Ganymede_-_Perijove_34_Composite.png/1280px-Ganymede_-_Perijove_34_Composite.png",
@@ -18,7 +18,7 @@ export default async function populate(db) {
 		id:1010,
 	})
 
-	await services.db.post({
+	await db.post({
 		table:"event",
 		title:"Skydiving on Jupiter",
 		image:"https://upload.wikimedia.org/wikipedia/commons/2/2b/Jupiter_and_its_shrunken_Great_Red_Spot.jpg",
@@ -27,7 +27,7 @@ export default async function populate(db) {
 		id:1020,
 	})
 
-	await services.db.post({
+	await db.post({
 		table:"event",
 		title:"Caving on Mars",
 		image:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/OSIRIS_Mars_true_color.jpg/1280px-OSIRIS_Mars_true_color.jpg",
@@ -37,7 +37,7 @@ export default async function populate(db) {
 	})
 }
 
-export async testdb(db) {
+export async function testdb(db) {
 	// internal test
 	let job = await db.observe(0,{
 		table:"party",

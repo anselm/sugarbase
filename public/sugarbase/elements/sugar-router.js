@@ -25,6 +25,7 @@ export default class SugarRouter extends HTMLElement {
 	///
 
 	constructor(buildstyle=true) {
+		super()
 
 		this.producedClasses = {}
 		this.producedNames = {}
@@ -284,8 +285,8 @@ export default class SugarRouter extends HTMLElement {
 	}
 
 	connectedCallback() {
-		router.push(router.user_router)
-		router.reset()
+		this.push(this.user_router)
+		this.reset()
 	}
 
 }

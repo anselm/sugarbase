@@ -2,23 +2,48 @@
 
 R1 Jan 2021
 
-SugarBase is a transparent javascript minimalist framework for building SPA (single page app) websites. No compilation phase is required, and I don't rely on the shadow dom, or a pre-parsing phase for html tags. This is designed to be programmer friendly (but) it is not as designerly friendly as other frameworks).
+SugarBase is a javascript minimalist framework for building SPA (single page app) websites. No compilation phase is required and it doesn't try to optimize rewrites to the dom.
+
+## Running
+
+	npm update
+	npm start
 
 ## Examples
 
-This repository is organized as a series of separate standalone demos where arranged from very simple capabilities such as basic elements, observability and routing to more opinionated approaches to supporting reactivity and observables in firebase to styling, css elements and mixing 2d and 3d elements together in a page layout.
+This repository is organized as a series of layers or standalone demos where arranged from very simple capabilities such as pages, cards, forms and routing to more opinionated approaches to style, state, persistence, and mixing 2d and 3d elements together in a page layout.
 
 ## Comparisons to React, Svelte and others
 
-Modern web apps are demanding both visually, from a design perspective, and technically from an engineering perspective. Often a designer works in HTML, laying out and arranging the basic visual building blocks of the user experience. This can include simple things like the color of a button, but can also include complex things such as what information each page displays, transitions between pages, what to do if there is an error and so on. But these building blocks are not magically created. Behind the scenes a programmer often creates those building blocks themselves for the designer using javascript.
+Modern web apps can be hard to write both from a design perspective and from a engineering perspective.
 
-Tools like React help teams with both designers and coders. React exposes HTML in a fairly conventional way that is comfortable to designers, while also providing a consistent way for programmers to create new building blocks or components in a consistent way as well. Today there are thousands of libraries of useful visual widgets and components based on React, and React has been very successful as a pattern.
+Often designers works in HTML, which is a right-sized grammar for their work, arranging visual building blocks to satisfy the user experience requirements. This can include simple things like the color of a button, but can also include complex things such as accessibility, what information each page displays, transitions between pages, what to do if there is an error and so on.
 
-Despite how nice React can be in terms of providing a high level abstraction and understanding of a complex system it does have serious implementation defects. No abstraction is perfect, and it means that designers have to now often know React and HTML and Javascript. As well React itself is inefficient - it's simply attempting to abstract in a way that insulates designers from real issues. The fact is if you need to deal with procedural logic, and you need to be efficient, then you should use javascript - which exposes the right powers in the right ways. Here is a critique of React:
+But these underlying building blocks are not magically created. Behind the scenes a programmer often defines pieces for the designer; in a sense the programmer and designer work together - the programmer typically listens carefully to designer needs, and then builds pieces to empower the designer to do the rest of the work.
+
+Frameworks can help both designers and coders. React, for example, exposes HTML in a fairly conventional way that is comfortable to designers, while also providing a consistent way for programmers to create new building blocks. Today there are thousands of libraries of useful visual widgets and components based on React, and React has been very successful as a pattern.
+
+Frameworks also take care of some subtle chores that are not entirely obvious. The lifecycle of a component, and actually painting content to the screen in a complex app by hand can take several steps:
+
+1. Declaring new components. Most frameworks extend the browser built-in concept of a 'Custom Element'. Unfortunately this is a poorly designed concept and frameworks largely exist to try patch around this. See : https://html.spec.whatwg.org/multipage/custom-elements.html#custom-elements . Some of the design flaws include not being able to pass complex types as attributes, not being able to set attributes in a constructor, not being able to add children in a constructor, having to declare custom elements 'define' prior to use, requiring dashes in element names and so on. It's almost like WhatWG and W3C go out of their way to produce baroque and limited anti-design that hurts the web rather than help sadly. Frameworks exist to work around these design bugs.
+
+2. Passing state. Because Custom Element attributes cannot handle complex objects developers must implement their own state mechanism. In Preact and React you'll see a props or a defaults or a properties field that is used to indicate which state is important to a component.
+
+3. Dealing with layout. Because (again) Custom Element handles attributes poorly, you'll often see a JSX style pre-pass on html templates in order to be able to pass rich state. See html template tag functions.
+
+4. Virtual DOM. Another pattern often seen with React like frameworks is a virtual dom diffing; where there is a (mistaken) impression that painting to the DOM is slow, and they carefully virtually diff changes and only render what is needed. (I prefer to make the developer do this work themselves, and themselves decide when they need to repaint - and I prefer not to support virtual diffing at all).
+
+Abstractions such as React help but also have flaws:
+
+1. Leaky abstractions. Despite how nice React can be in terms of providing a high level abstraction and understanding of a complex system it does have serious implementation defects. No abstraction is perfect, and it means that designers have to now often know React and HTML and Javascript.
+
+2. JSX and templating systems are the wrong place to express logic. The fact is if you need to deal with procedural logic, and you need to be efficient, then you should use javascript - which exposes the right powers in the right ways. Here is a critique of React:
+
+3. Virtual Dom diffing seems like a bit overkill; others agree:
 
 	https://svelte.dev/blog/virtual-dom-is-pure-overhead
 
-Of course it’s not hard to build web apps from scratch. If you stand back and look at frameworks from a 10000 foot view the general pattern is that a framework will define either a new meta-language or a set of conventions, and often that language will be similar to patterns that typical designers and developers are expected to know. That is to say that often you’ll see some slight variation of HTML, and then some formal way of defining new components that can be expressed in HTML.
+4. Frameworks have their own learning curves, conventions and assumptions. For example React has a philosophy that rendering components are "pure"; that they are purely a reflection of an objects state. This has subtle impacts on how you write logic especially in the render() call. Generally if you stand back and look at frameworks from a 10000 foot view the general pattern is that a framework will define either a new meta-language or a set of conventions, and often that language will be similar but not the same as patterns that typical designers and developers are expected to know. That is to say that often you’ll see some slight variation of HTML, and then some formal way of defining new components that can be expressed in HTML. New patterns, especially when their implementation is hidden, take cognitive load and are hard on people.
 
 Here are a few links to a few deep dives on other frameworks and framework related issues if you are interested:
 
@@ -28,6 +53,7 @@ Here are a few links to a few deep dives on other frameworks and framework relat
 	https://lit-element.polymer-project.org/guide
 	https://dev.to/jfbrennan/custom-html-tags-4788
 	https://mobx.js.org/README.html
+	https://unpkg.com/browse/htm@2.2.1/README.md
 	https://preactjs.com/
 	https://svelte.dev/
 	https://lit.dev/
@@ -39,34 +65,29 @@ Here are a few links to a few deep dives on other frameworks and framework relat
 ```javascript
 class MyWidget extends SugarElement {
 
-	// 'state' is a special enumeration of local variables; anything statically defined here will trigger redraw events on change
-	state = { color:"blue" }
-
-	// unlike HTMLElement.setAttribute() this framework strongly encourages passing any initialization you want in the constructor
-	constructor(state) {
-		super()
-
-		// this.state starts off as a copy of this.prototype.state - you can tack on whatever you wish...
-	    this.state = { ...state, time: Date.now() }
-	}
+	// enumeration of local variables; anything statically defined here will trigger redraw events on change
+	static defaults = { time: Date.now() }
 
 	// this is invoked by the dom when an element is connected to display
-	connectedCallback() {
-	}
+	connectedCallback() {}
+
+	// only invoked once
+	connectedFirstTime() {}
 
 	// invoked on disconnect; such as a page being hidden
-	disconnectedCallback() {
-	}
+	disconnectedCallback() {}
 
 	// a state change observer on props
-	propChanged() {
-	}
+	propChanged() {}
 
 	render() {
-		// your job here is to describe a template and let the system actually paint the element
+		// the same as preact and react you can use the html tagged template function to describe a layout
 		let time = new Date(this.state.time).toLocaleTimeString();
-		// there is no shadow dom implicitly nor is there an html`` or css`` style tagged template function
-		return `<span>{time}</span>`;
+		return html`<span>{time}</span>`;
+	}
+
+	renderOnce() {
+		// same as above except only invoked once
 	}
 }
 ```
@@ -76,12 +97,12 @@ class MyWidget extends SugarElement {
 ```javascript
 let elem = new MyWidget({color:”blue”});
 
-// or
+// attributes are turned into props and can be full blown objects - so this is similar to the above
 
 document.body.innerHTML=“<my-widget color=“blue”></my-widget>”
 ```
 
-3. Observability: I strongly discourage using customElement observedAttributes() and attributeChangedCallback(). They cannot handle complex types, cannot set a value during construction, cannot set a default, and cannot be modified. They're an ill conceived concept that doesn't map well to a data driven app philosophy. Instead we use this.prototype.state and this.state instead to describe state and observability. This for example will force a redraw of a widget - and you should handle the application of color yourself in the render() method:
+3. Observability: Similar to react and preact you can just set state to force a refresh
 
 ```javascript
 let widget = new Widget({color:"blue"});
@@ -99,9 +120,9 @@ widget.palette.primary = "red"
 Typically real applications are going to watch database state and be responsive to that (web apps tend to be multi participant with real time updates across the network to all participants). Also, almost always, there is a parent component that manages a list of elements; so the pattern isn't so much that an object wants to update itself, but rather it has some logic to specifically find and update children in itself - and the children don't have any particular awareness of database state. There are lots of ways to accomplish this pattern. For example:
 
 ```javascript
-class DatabaseWidget extends SugarElement {
+class DatabaseViewWidget extends SugarElement {
 	connectedCallback() {
-		// connected can be called more than once... up to you to decide how you want to deal with that
+		// connected can be called more than once... you can also use connectedFirstTime()
 		if(!this.observers) {
 			// in this example (using a hypothetical database wrapper) a full refresh of state is triggered
 			this.observers = Services.observe({table:"activity",kind:"post",offset:0,limit:10,orderby:"created"},(item)=>{
@@ -115,8 +136,8 @@ class DatabaseWidget extends SugarElement {
 		// sometimes it makes sense to stop observing if not visible; it's up to you
 		Services.stop(this.observers)
 	}
-	render() {
-		// sometimes it makes sense to not bother drawing if not attached to dom
+	doSomething() {
+		// sometimes it makes sense to not bother doing work if not attached to dom
 		if(!this.isConnected()) return
 	}
 }
@@ -126,7 +147,7 @@ class DatabaseWidget extends SugarElement {
 
 ```javascript
 	render() {
-		return `
+		return html`
 			<sugar-groups class="sugar-page">
 				<sugar-header></sugar-header>
 				<sugar-database-cards class="sugar-content" observe="groups">
@@ -273,4 +294,34 @@ Here is a sketch of a typical full blown data driven back end content management
 	9. Layout collections
 
 TODO build
+
+## NOTES
+
+	* basic-site (done)
+
+	- delete elements site
+	- delete style site
+	- delete firebase site
+
+	- cms site
+
+	- minor
+		- db: synthesize nodes together
+
+		- forms
+			- images and thumbs
+
+		- cards non critical features to do
+			- test out side by side
+			- add sigils
+
+		- collections non critical features to add
+			- sort order!
+			- paging
+			- mark and sweep
+			- delete
+
+		- 3d
+
+
 

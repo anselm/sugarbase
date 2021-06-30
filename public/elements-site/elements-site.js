@@ -1,27 +1,33 @@
+// todo may delete this example
 
-// css
-document.head.innerHTML += `
-	<link type="text/css" rel="stylesheet" href="/basic-site/basic-mobile.css">
-	<link type="text/css" rel="stylesheet" href="/basic-site/basic-forms-large.css">
-	<link type="text/css" rel="stylesheet" href="/elements-site/sugar-sigils.css">
-	`
-
-// grab an example services layer
-import '/data-site/data-services.js'
-
-// stuff some data in it
-import '/data-site/data-somedata.js'
+// example services layer and data
+import '/sugarbase/db/data-services.js'
+import '/sugarbase/db/data-somedata.js'
 
 // elements used here
-import "/basic-site/sugar-element.js"
-import "./sugar-collection.js"
-import "./sugar-image-card.js"
-import './elements-page.js'
+import "/sugarbase/elements/sugar-element.js"
+import "/sugarbase/elements/sugar-collection.js"
+import "/sugarbase/elements/sugar-sigil.js"
+import "/sugarbase/elements/sugar-card.js"
+import '/sugarbase/elements/sugar-form.js'
 
-// run on demand
+// run
+
 export async function run() {
-	setTimeout(()=>{
-		document.body.innerHTML="<elements-page></elements-page>"
-
-	},1000)
+	htmlify2dom(document.body,
+		htmlify`
+			<link type="text/css" rel="stylesheet" href="/sugarbase/style/sugar-mobile.css" />
+			<link type="text/css" rel="stylesheet" href="/sugarbase/style/sugar-forms-large.css" />
+			<sugar-page>
+				<sugar-content>
+					<h1>A collection example</h1>
+					<sugar-form></sugar-form>
+					<sugar-collection
+						db=${Services.observe.bind(Services)}
+						query=${{table:"event"}}
+						card="sugar-card">
+					</sugar-collection>
+				</sugar-content>
+			</sugar-page>`
+	)
 }

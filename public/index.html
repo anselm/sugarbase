@@ -43,16 +43,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 	let url = new URL(location.href)
 	switch(url.searchParams.get('path')) {
-		case 'firebase':
-		case 'basicsite':
+		case 'fancy':
+		case 'fancy-site':
 			{
-				let {run} = await import("/firebase-site/firebase-site.js")
+				let {run} = await import("/fancy-site/fancy-site.js")
 				run()
 			}
 			break
 		default:
 			{
-				let {run} = await import("/elements-site/elements-site.js")
+				let {run} = await import("/basic-site/basic-site.js")
 				run()
 			}
 	}

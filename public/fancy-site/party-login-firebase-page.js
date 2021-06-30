@@ -10,12 +10,12 @@ class PartyLoginFirebasePage extends HTMLElement {
 
 	connectedCallback() {
 
-		this.className="sugar-page"
 		this.innerHTML =
-			`<div class='sugar-content'>
-			<div id="firebaseui-auth-container"></div>
-			</div>
-			`
+			`<sugar-page>
+				<sugar-content>
+					<div id="firebaseui-auth-container"></div>
+				</sugar-content>
+			</sugar-page>`
 
 		var uiConfig = {
 			credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
@@ -58,13 +58,15 @@ class PartyLoginFirebasePage extends HTMLElement {
 		if(!this.ui) {
 			this.ui = new firebaseui.auth.AuthUI(firebase.auth())
 		}
-		if(!Services.currentParty) {
+
+		if(Services.state && !Services.state.currentParty) {
 			this.ui.start('#firebaseui-auth-container', uiConfig )
 		}
 
+		// todo could watch if state is set and then hide this all... but it is not usually accessible otherwise
 	}
 
 }
 
-customElements.define('party-login-firebase-page', PartyLoginFirebasePage )
+customElements.define('party-login-page', PartyLoginFirebasePage )
 

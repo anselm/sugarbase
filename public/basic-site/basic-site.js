@@ -1,25 +1,30 @@
 
-document.head.innerHTML += `<link type="text/css" rel="stylesheet" href="/basic-site/basic-mobile.css">`
-document.head.innerHTML += `<link type="text/css" rel="stylesheet" href="/basic-site/basic-forms-large.css">`
+// bring in an element helper
+import '/sugarbase/elements/sugar-element.js'
 
-import './sugar-element.js'
-
-class BasicElement extends SugarElement {
-	static defaults = {
-		title:"🙈"
-	}
-	constructor(props) {
-		super(props,'basic-element',BasicElement)
-	}
-	connectedCallback() {
-		console.log("BasicElement is being asked to paint display with title="+this.title)
-		this.style = "sugar-page"
-		this.innerHTML += this.title
+// build an example element
+export class BasicElement extends SugarElement {
+	static defaults = { title:"See not 🙈" }
+	render() {
+		console.log("render is being called with " + this.title)
+		return htmlify`Monkey says: ${this.title}`
 	}
 }
+customElements.define('basic-element', BasicElement )
 
+// perform a raw layout right now to the display
 export function run() {
-	let elem = new BasicElement({title:"🙉"})
-	document.body.append( new BasicElement() )
-	elem.title = "🙊"
+	htmlify2dom(document.body,
+		htmlify`
+			<link type="text/css" rel="stylesheet" href="/sugarbase/style/sugar-mobile.css" />
+			<sugar-page>
+				<sugar-content>
+					<basic-element>This is outside the render() scope: Hear Not 🙉</basic-element>
+				</sugar-content>
+			</sugar-page`,
+	)
+	let elem = document.body.querySelector('basic-element')
+	elem.title = "Speak not 🙊"
 }
+
+// do simple tags work?
