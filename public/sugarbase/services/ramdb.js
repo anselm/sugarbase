@@ -7,8 +7,7 @@
 ///		transaction -> this is a helper that downstream listeners can use to know what the event was
 ///
 
-
-export default class RamDB {
+class DB {
 
 	async post(obj) {
 		if(!this.db) this.db = {}
@@ -94,12 +93,19 @@ export default class RamDB {
 		return job
 	}
 
-	login(user = {id:1000,displayName:"Blake Jenkins"}) {
-		if(Services.state) Services.state.set({currentParty:user})
+	login(user) {
+		if(this.callback) this.callback(user)
 	}
 
 	signout() {
-		if(Services.state) Services.state.set({currentParty:0})
+		if(this.callback) this.callback(0)
+	}
+
+	onauth(callback=0) {
+		this.callback=callback
 	}
 
 }
+
+export let db = new DB();
+
