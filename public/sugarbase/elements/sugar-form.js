@@ -50,7 +50,7 @@ export class SugarForm extends SugarElement {
 
 		let submit = (args) => {
 			delete artifact.id
-			Services.post(artifact)
+			Services.db.post(artifact)
 		}
 
 		let remove = () => {

@@ -5,6 +5,9 @@
 
 import {htmlify,htmlify2dom} from '../htmlify.js'
 
+//export htmlify
+//export htmlify2dom
+
 ///
 /// Extends HTMLElement with observers
 ///

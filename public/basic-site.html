@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<title>SugarBase Basic Site</title>
+
+<link rel="icon" href="/art/favicon.ico">
+
+<!-- some browsers will paint emoji badly sometimes unless they get primed for some reason -->
+<meta name="🔒🔒🔒" content="this is a hint to tell the browser that there will be emoji">
+
+<!-- It's nice to use a Web Monetization Payment Pointer - use your own unless you want to pay me - see coil.com -->
+<meta name="monetization" content="$coil.xrptipbot.com/5ra3zZ_aRIS8CUUFzZcHcQ">
+
+<!-- Disable scaling on mobile displays -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+<!-- Web Application Manifest - see https://developer.mozilla.org/en-US/docs/Web/Manifest -->
+<link rel="manifest" type="application/json" href="manifest.json">
+
+<!-- Register .webmanifest as a type for android desktop -->
+<staticContent>
+<mimeMap fileExtension=".json" mimeType="application/json" />
+<mimeMap fileExtension=".webmanifest" mimeType="application/manifest+json" />
+</staticContent>
+
+<!-- Allow add to homescreen as a pseudo PWA app for ios -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="SugarBase">
+<meta name="theme-color" content="#4285F4">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Sugar">
+<meta name="apple-mobile-web-app-status-bar-style" content="#4285F4">
+
+<!-- some more style advice -->
+<link type="text/css" rel="stylesheet" href="/sugarbase/style/sugar-mobile.css" />
+
+</head>
+<body>
+</body>
+</html>
+
+<script type=module>
+
+import '/sugarbase/elements/sugar-element.js'
+
+export class BasicElement extends SugarElement {
+	static defaults = { title:"See not 🙈" }
+	render() {
+		console.log("render is being called with " + this.title)
+		return htmlify`Monkey says: ${this.title}`
+	}
+}
+customElements.define('basic-element', BasicElement )
+
+async function bootup() {
+	htmlify2dom(document.body,
+		htmlify`
+			<sugar-page>
+				<sugar-content>
+					<basic-element>This is outside the render() scope: Hear Not 🙉</basic-element>
+				</sugar-content>
+			</sugar-page`,
+	)
+	let elem = document.body.querySelector('basic-element')
+	elem.title = "Speak not 🙊"	
+}
+
+document.addEventListener('DOMContentLoaded', bootup);
+
+</script>

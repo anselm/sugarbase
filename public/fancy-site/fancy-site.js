@@ -1,7 +1,6 @@
 
 document.head.innerHTML += `<link type="text/css" rel="stylesheet" href="/sugarbase/style/sugar-mobile.css">`
 
-
 // sugar elements used in this app
 
 import '/sugarbase/elements/sugar-element.js'
@@ -12,12 +11,13 @@ import '/sugarbase/elements/sugar-form.js'
 import '/sugarbase/elements/sugar-404-page.js'
 import '/sugarbase/elements/sugar-router.js'
 
-// app local elements
+// app elements
 
-import './nav-bar-component.js'
 import './splash-page.js'
+import './events-page.js'
 import './party-profile-page.js'
 import './party-signout-page.js'
+import './nav-bar-component.js'
 
 // app routes
 
@@ -29,6 +29,7 @@ export let user_router = (segments) => {
 		case "profile": return "party-profile-page"
 		case "login": return "party-login-page"
 		case "signout": return "party-signout-page"
+		case "events": return "events-page"
 		default: break
 	}
 	return "sugar-404-page"
@@ -40,7 +41,7 @@ export let user_router = (segments) => {
 
 export async function run() {
 
-	// build a global services layer that handles non display logic - in this case tacking on a state concept with observers
+	// build a services layer that handles core logic
 
 	let services = window.Services = {}
 	let {state} = await import('/sugarbase/services/state.js')
@@ -48,7 +49,7 @@ export async function run() {
 
 	// this helper swaps in some fake login page support and a fake ramdb and some fake data
 
-	let ram = async () => {
+	if(true) {
 
 		await import('./party-login-page.js')
 
@@ -67,7 +68,7 @@ export async function run() {
 
 	// this helper stuffs firebase into our services layer instead - and also a real login page at sugar-login-page
 
-	let fire = async () => {
+	else {
 
 		// add firebase login page
 		await import('./party-login-firebase-page.js')
@@ -77,47 +78,19 @@ export async function run() {
 		services.db = db
 	}
 
-	// run either real or fake as desired
-
-	if(true) {
-		// run the fake ram db - and fake an auth event for consistency
-		await ram()
-	} else {
-		// run the real firebase db - it will always respond with an auth event right away even if user is undefined
-		await fire()
-	}
-
-	// wait for auth event to set the party
+	// wait for auth event to set the party; often in a real app the entire display would not be built till after this
 
 	Services.db.onauth( (user)=> {
 		Services.state.set({currentParty:user})
 	})
 
-	// paint view
+	// paint view - in a real app the css would be loaded way earlier so as to reduce flickering
 
 	htmlify2dom(document.body,
 		htmlify`<link type="text/css" rel="stylesheet" href="/sugarbase/style/sugar-mobile.css" />
-				<nav-bar-component></nav-bar-component>
+				<link type="text/css" rel="stylesheet" href="/sugarbase/style/sugar-forms-large.css" />
+				<nav-bar-component/>
 				<sugar-router user_router=${user_router}></sugar-router>`
 	)
 
 }
-
-// - your logged in profile page should
-//		- show buttons for events, rooms and so on
-//		- have an events page that enumerates events
-//		- have an event adder page that adds an event
-//		- have a delete button for events
-//		- allow edit also
-
-// are short tags like <nav-bar-component /> supported?
-
-
-
-
-
-
-
-
-
-

@@ -41,21 +41,8 @@
 <script type=module>
 document.addEventListener('DOMContentLoaded', async () => {
 
-	let url = new URL(location.href)
-	switch(url.searchParams.get('path')) {
-		case 'fancy':
-		case 'fancy-site':
-			{
-				let {run} = await import("/fancy-site/fancy-site.js")
-				run()
-			}
-			break
-		default:
-			{
-				let {run} = await import("/basic-site/basic-site.js")
-				run()
-			}
-	}
+	let {run} = await import("/fancy-site/fancy-site.js")
+	run()
 
 });
 </script>

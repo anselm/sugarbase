@@ -1,6 +1,9 @@
 export class PartyProfilePage extends HTMLElement {
 	connectedCallback() {
 		let moniker = Services.state.currentParty ? Services.state.currentParty.displayName : 0
+
+// kick them away if not signed in todo
+
 		this.innerHTML =
 			`<sugar-page>
 				<sugar-content>
@@ -9,8 +12,8 @@ export class PartyProfilePage extends HTMLElement {
 					Actions you may take here:
 					<ul>
 						<li><a href="/">go to home page</a>
-						<li style="display:${moniker?"normal":"none"}"><a href="/profile">go to your page</a>
-						<li style="display:${moniker?"normal":"none"}"><a href="/signout">go to signout</a>
+						<li><a href="/events">go events</a>
+						<li><a href="/signout">go to signout</a>
 					</ul>
 				</sugar-content>
 			</sugar-page>`
