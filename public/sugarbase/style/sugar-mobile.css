@@ -80,7 +80,6 @@ sugar-content button {
 }
 
 sugar-content button:hover, sugar-content button:focus {
-	color: #006633;
 	font-weight: bold;
 	text-decoration:underline;
 } 
@@ -88,8 +87,8 @@ sugar-content button:hover, sugar-content button:focus {
 sugar-content input {
 	display: block;
 	border-radius:5px;
-	border:3px solid purple;
 	padding:10px;
+	border: 3px solid purple;
 	margin-top:10px;
 	margin-bottom:10px;
 	font-size:1.1em;
@@ -102,7 +101,7 @@ sugar-content input {
 sugar-content text-area {
 	display: block;
 	border-radius:5px;
-	border:3px solid green;
+	border: 3px solid purple;
 	padding:10px;
 	margin-top:10px;
 	margin-bottom:10px;

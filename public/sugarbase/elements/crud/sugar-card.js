@@ -26,7 +26,6 @@ export class SugarCard extends SugarElement {
 			`
 
 		let p_style = `margin:4px`
-console.log(this.artifact)
 		this.innerHTML =
 			`<a href="${this.artifact.volatile.url}">
 			<div style="${inner_div_style}"></div>

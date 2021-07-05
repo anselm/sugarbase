@@ -10,6 +10,20 @@ export async function somedata(db) {
 	})
 
 	await db.post({
+		table:"member",
+		title:"Blake Jenkins",
+		image:"https://upload.wikimedia.org/wikipedia/en/9/91/George_%28novel%29.jpg",
+		id:1001,
+	})
+
+	await db.post({
+		table:"perm",
+		title:"Megaphone",
+		image:"https://upload.wikimedia.org/wikipedia/en/9/91/George_%28novel%29.jpg",
+		id:1002,
+	})
+
+	await db.post({
 		table:"group",
 		title:"The Sky People",
 		image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Ganymede_-_Perijove_34_Composite.png/1280px-Ganymede_-_Perijove_34_Composite.png",

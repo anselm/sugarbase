@@ -1,36 +1,33 @@
 
-export class GroupsPage extends SugarElement {
+export class MembersPage extends SugarElement {
 	render() {
 		return htmlify`
 			<sugar-page>
 				<sugar-content>
-					<h1>List of Groups</h1>
-					<a href="/group/edit">Create a Group now</a>
+					<h1>Members of area X</h1>
+					<a href="/member/edit">Add a member</a>
 					<sugar-collection
 						observe=${Services.db.observe.bind(Services.db)}
-						query=${{table:"group"}}
+						query=${{table:"member"}}
 						card="sugar-card">
 					</sugar-collection>
 				</sugar-content>
 			</sugar-page>`
 	}
 }
-customElements.define('groups-page', GroupsPage )
+customElements.define('members-page', MembersPage )
 
-export class GroupDetailPage extends SugarElement {
+export class MemberDetailPage extends SugarElement {
 	render() {
 		return htmlify`
 			<sugar-page>
 				<sugar-content>
-					<h1>Detail on a Group</h1>
-					<a href="/group/edit/1234">Link to edit this group</a>
-					<br/>
-					<a href="/members/1234">link to members of this group</a>
-					<br/>
-					<h1>Events in Group</h1>
+					<h1>Member Detail Page</h1>
+					<a href="/member/edit/1234">Link to edit this member</a>
+					<h1>Permissions on Member</h1>
 					<sugar-collection
 						observe=${Services.db.observe.bind(Services.db)}
-						query=${{table:"event"}}
+						query=${{table:"perm"}}
 						card="sugar-card">
 					</sugar-collection>
 					<br/>
@@ -38,15 +35,15 @@ export class GroupDetailPage extends SugarElement {
 			</sugar-page>`
 	}
 }
-customElements.define('group-detail-page', GroupDetailPage )
+customElements.define('member-detail-page', MemberDetailPage )
 
 
-export class GroupEditPage extends SugarElement {
+export class MemberEditPage extends SugarElement {
 	render() {
 
 		let subject = {
 			id:0,
-			table:"group",
+			table:"member",
 			title:"Sun sky",
 			url:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/The_Sun_by_the_Atmospheric_Imaging_Assembly_of_NASA%27s_Solar_Dynamics_Observatory_-_20100819.jpg/1920px-The_Sun_by_the_Atmospheric_Imaging_Assembly_of_NASA%27s_Solar_Dynamics_Observatory_-_20100819.jpg",
 			image:"my image"
@@ -69,10 +66,10 @@ export class GroupEditPage extends SugarElement {
 		return htmlify`
 			<sugar-page>
 				<sugar-content>
-					<h1>Group Edit</h1>
+					<h1>Member Edit</h1>
 					<sugar-form subject=${subject} schema=${schema}></sugar-form>
 				</sugar-content>
 			</sugar-page>`
 	}
 }
-customElements.define('group-edit-page', GroupEditPage )
+customElements.define('member-edit-page', MemberEditPage )

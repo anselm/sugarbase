@@ -1,7 +1,7 @@
 
 ///
 /// a pretend database
-/// callers should pass a hash of properties including
+/// callers should pass a hash of properties to post new things
 ///		table -> which table to write to
 ///		id -> if object exists already
 ///		transaction -> this is a helper that downstream listeners can use to know what the event was
@@ -104,15 +104,22 @@ class DB {
 
 	/// fake login
 
-	login(args) {
+	async login(args) {
+		let fakeuser = await this.post({
+			table:"party",
+			name:args.name,
+			displayName:args.name,
+		})
+		console.log("created user")
+		console.log(fakeuser)
+		this.authchange(fakeuser)
+	}
+
+	async signup(args) {
 		this.authchange({displayName:args.name})
 	}
 
-	signup(args) {
-		this.authchange({displayName:args.name})
-	}
-
-	signout() {
+	async signout() {
 		this.authchange(0)
 	}
 

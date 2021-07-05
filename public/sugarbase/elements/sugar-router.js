@@ -118,6 +118,32 @@ console.log(path)
 		return this
 	}
 
+/*
+	///
+	/// This is an approach that is more declarative
+	///
+
+	bundle(data) {
+
+		let bundle_handler = () => {
+			Object.entries(data).forEach( ([k,v]) => {
+				console.log(k)
+				console.log(v)
+				if(v.condition) {
+					let results = v.condition(segments)
+					// deal with "do soemthing else"
+					//if good then use the element ... pass it the args
+				} else if(path match) {
+					// same
+				}
+			})
+		}
+
+		this.handlers.push(bundle_handler)
+
+	}
+*/
+
 	///
 	/// Show the right page for a url
 	///

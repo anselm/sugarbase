@@ -4,7 +4,8 @@ export class EventsPage extends SugarElement {
 		return htmlify`
 			<sugar-page>
 				<sugar-content>
-					<h1>A collection example</h1>
+					<h1>A bunch of events</h1>
+					<a href="/event/edit">Create an event (in a group)</a>
 					<sugar-collection
 						db=${Services.db.observe.bind(Services.db)}
 						query=${{table:"event"}}
@@ -21,7 +22,18 @@ export class EventDetailPage extends SugarElement {
 		return htmlify`
 			<sugar-page>
 				<sugar-content>
-				This is a detail on a event
+					<h1>Event Detail Page</h1>
+					<a href="/event/edit/1234">Link to edit this event</a>
+					<br/>
+					<a href="/response/create">Add a response on this event</a>
+					<br/>
+					<h1>Responses on Event</h1>
+					<sugar-collection
+						observe=${Services.db.observe.bind(Services.db)}
+						query=${{table:"response"}}
+						card="sugar-card">
+					</sugar-collection>
+					<br/>
 				</sugar-content>
 			</sugar-page>`
 	}

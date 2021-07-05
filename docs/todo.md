@@ -1,52 +1,52 @@
 
 # TODO
 
-	- can i get this up before next week?
-	- groups, events, worlds, artifacts are the main things
+- demo
 
-	- improve login to let anybody login ... just make account fake
+	- router could actually stuff args into page constructors -> remove need for globals entirely
+		- nav bar and main page could then trust they have access to state
+
+	- there is an idea of volatile; this may need to be pulled up to the top level or something
+
+	* fake login is a bit richer; this is desirable for tests
+	* menu bar is in
+	* groups; shows a list of groups
+		* you can add a group
+		- paginate
+		- search / filter
+
+		- unless i make the card smarter i feel like i would like a custom group card? debate
+
+		- there is kind of an idea of a group detail but the url for it needs volatile support
+		- can you edit a group yet? can you delete a group?
+
+		- a group detail should enumerate its events or 'sparks' and also let you add an event
+
+		- a group detail page should link to member list? -> and allow add remove of
+
+	- group people
+		- from group detail you can see members in a list of some kind possibly with +/-
+		- from group detail you can invite a person by email i presume; or search?
+		- you can also click on a person detail
+		- from a person detail you can add or remove permissions
+
+	- person settings in general for youself
+		- let you pick an avatar
+		-
+
+	- event detail
+		- show facts about an event
+		- edit an event
 
 **********************
 
-	* i revved the nav bar to use newer state sensing
-	* added menu to nav bar
-	* test menu out please
-
-	* groups; you have a crude list of groups now
-	- should really search filter sort and paginate
-
-	* you can add a group with a group edit
-	- error checks all around
-	- make sure full lifecyle
-
-	- have a group detail page
-	- link to edit
-	- list activity here (events) and maybe have an event creator button
-	- link to member list?
-
-	- group edit -> and delete? -> what is convention for deleting dependencies of a group?
-
-	- group members list
-		- link to +
-		- search filter sort
-		- members have a delete button
-		- maybe even show their perms here
-
-i was struggling over team or group
-i feel team is people on one side, which is correct for some projects but too specific for others
-group is any group of people with a common interest
-and in this case it is just for upcoming events mostly
-but in other experiences it may be for posts? in a sense a post can be an event too
-
-
-**********************
-
+- router polish
+	- i do make a separate instance of a page per url - examine this a bit closer
 
 - basic elements polish
-	- image uploaders with thumb generators
+	* form builder
 
-	- forms
-		- images and thumbs
+	- image uploaders with thumb generators
 
 	- cards non critical features to do
 		- test out side by side
@@ -58,10 +58,6 @@ but in other experiences it may be for posts? in a sense a post can be an event 
 		- paging
 		- mark and sweep
 		- delete
-
-	- router
-		- it would be nice to make several copies of pages when they are persistent; and only flush the super oldest ones
-		- this would reduce rebuild time?
 
 - 3d components
 	- individual objects
@@ -89,7 +85,7 @@ but in other experiences it may be for posts? in a sense a post can be an event 
 	- test real firebase -> does it mirror the ramdb api?
 	- test real logging in
 
-	- joined query support?
+	- joined query support? volatile data
 		- synthesize nodes together; provide consistent wrapper to firebase, use rxfire?
 		- often we want to fill out some extra information when we get say an event, or a room or a post; such as the sponsor profile
 		- these can be separate queries on the back end and it is arguable if we should join them on the back or the front
