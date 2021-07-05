@@ -44,12 +44,20 @@ export default class SugarRouter extends HTMLElement {
 
 		// watch user navigation events
 		window.addEventListener("popstate", (e) => {
+
+console.log("user popped " + document.location.pathname)
+
 			this._show(document.location.pathname,"pop")
 		})
 
 		// watch user navigation events - monkey patch browser
 		var previousPushState = history.pushState.bind(history)
 		history.pushState = (state,path,origin) => {
+
+console.log("user pushed " + document.location.pathname)
+console.log(state)
+console.log(path)
+
 			previousPushState(state,path,origin)
 			this._show(path,"push")
 		}
@@ -116,6 +124,8 @@ export default class SugarRouter extends HTMLElement {
 
 	async _show(url=0) {
 
+console.log("being asked to show a page " + url)
+
 		// if no explicit name then look at current url
 		if(!url) url = location.pathname
 
@@ -128,21 +138,21 @@ export default class SugarRouter extends HTMLElement {
 		// get url as parts
 		let segments = url.split("/")
 
-		let kind = 0
+		let hint = 0
 
 		// ask handlers about url and get back a named dom element
-		for(let i = 0;kind==0 && i<this.handlers.length;i++) {
-			kind = await this.handlers[i](segments)
+		for(let i = 0;hint==0 && i<this.handlers.length;i++) {
+			hint = await this.handlers[i](segments)
 		}
 
 		// error
-		if(!kind) {
+		if(!hint) {
 			console.error("Router: bad handler name=" + url)
 			return 0
 		}
 
 		// make dom element
-		let inst = this._make(kind,url)
+		let inst = this._make(hint,url)
 
 		if(!inst) {
 			console.error("Router: could not resolve name=" + url)
@@ -161,9 +171,21 @@ export default class SugarRouter extends HTMLElement {
 		this.producedClasses[kind] = inst
 	}
 
-	_make(kind,url) {
+	_make(hint,url) {
 
+		let kind = 0
 		let inst = 0
+		let args = {}
+
+		// various "flavors" of can be built
+
+		if (typeof hint === 'string' || hint instanceof String) {
+			kind = hint
+		}
+		else if(hint instanceof Object && hint.element) {
+			kind = hint.element
+			args = hint
+		}
 
 		// if an object is supplied then use as is
 		//if(typeof classIdentifier === 'object') {
@@ -182,7 +204,12 @@ export default class SugarRouter extends HTMLElement {
 			if(this.producedClasses[kind]) {
 				inst = this.producedClasses[kind]
 			} else {
-				inst = document.createElement(kind)
+				let c = customElements.get(kind)
+				if(c) {
+					inst = new c(args)
+				} else {
+					inst = document.createElement(kind)
+				}
 				if(!inst) {
 					console.error("Router: cannot make " + kind)
 					return 0
@@ -201,6 +228,10 @@ export default class SugarRouter extends HTMLElement {
 	}
 
 	_glue(inst) {
+
+
+console.log("gluing to display")
+console.log(inst)
 
 		if(this.previous) {
 			if(inst && this.previous.id == inst.id) {
@@ -293,11 +324,12 @@ export default class SugarRouter extends HTMLElement {
 
 customElements.define('sugar-router', SugarRouter )
 
-window.SugarRouter = SugarRouter
+export let router = new SugarRouter()
 
 /*
+
 ///
-/// a simple router that only routes single paths
+/// a simple router - I've decided not to support this idea
 ///
 
 export class SugarRouter extends HTMLElement {

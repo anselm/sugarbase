@@ -10,6 +10,15 @@ export async function somedata(db) {
 	})
 
 	await db.post({
+		table:"group",
+		title:"The Sky People",
+		image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Ganymede_-_Perijove_34_Composite.png/1280px-Ganymede_-_Perijove_34_Composite.png",
+		sponsor:1,
+		uid:george.id,
+		id:1010,
+	})
+
+	await db.post({
 		table:"event",
 		title:"Walking in the rain on Ganymede",
 		image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Ganymede_-_Perijove_34_Composite.png/1280px-Ganymede_-_Perijove_34_Composite.png",

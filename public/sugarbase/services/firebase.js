@@ -6,13 +6,12 @@ import "/__/firebase/init.js?useEmulator=true"
 
 let firestore = firebase.firestore()
 
-export class DB = {
+class FireDB = {
 
-	login() {
-		// not needed
-	}
-
-	signout() {
+	authchange(user=0) {
+		// login is not handled here but rather magically calls onauth due to firebase
+		if(user) return
+		// logout... (which will trigger an onauth as well by firebase)
 		firebase.auth().signOut()
 	}
 
@@ -23,4 +22,4 @@ export class DB = {
 	}
 }
 
-export let db = new DB();
+export default new FireDB();

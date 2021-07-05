@@ -4,9 +4,9 @@ const port = 3456
 
 app.use(express.static('public'))
 
-app.get('/basic-site.html', (req, res) => { res.sendFile(__dirname + '/public/basic-site.html') })
+//app.get('/basic', (req, res) => { res.sendFile(__dirname + '/public/basic-site/index.html') })
 
-app.get('/*', (req, res) => { res.sendFile(__dirname + '/public/fancy-site.html') })
+app.get('/*', (req, res) => { res.sendFile(__dirname + '/public/index.html') })
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)

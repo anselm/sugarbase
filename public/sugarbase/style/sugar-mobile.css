@@ -1,8 +1,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Cantarell&display=swap');
-
 @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
-
 /* @import url('https://fonts.googleapis.com/css2?family=Lora&display=swap'); */
 
 :root {
@@ -29,9 +27,7 @@ p, div, input, textarea {
 }
 
 .underline { text-decoration: none; }
-
 .underline:hover { text-decoration: underline; }
-
 .hidden: {display: none }
 
 sugar-nav {
@@ -67,4 +63,52 @@ sugar-content {
 	sugar-content {
 		width:100%;
 	}
+}
+
+sugar-content button {
+	display: inline-block;
+	border-radius:25px;
+	border:3px solid red;
+	padding:4px;
+	margin-top:4px;
+	margin-bottom:4px;
+	font-size:1.05em;
+	justify-self:center;
+	box-sizing: border-box;
+	width:30%;
+	cursor: pointer;
+}
+
+sugar-content button:hover, sugar-content button:focus {
+	color: #006633;
+	font-weight: bold;
+	text-decoration:underline;
+} 
+
+sugar-content input {
+	display: block;
+	border-radius:5px;
+	border:3px solid purple;
+	padding:10px;
+	margin-top:10px;
+	margin-bottom:10px;
+	font-size:1.1em;
+	justify-self:center;
+	box-sizing: border-box;
+	width:100%;
+	cursor: pointer;
+}
+
+sugar-content text-area {
+	display: block;
+	border-radius:5px;
+	border:3px solid green;
+	padding:10px;
+	margin-top:10px;
+	margin-bottom:10px;
+	font-size:1.1em;
+	justify-self:center;
+	box-sizing: border-box;
+	width:100%;
+	cursor: pointer;
 }

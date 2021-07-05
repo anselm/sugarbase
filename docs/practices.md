@@ -47,6 +47,8 @@ let mycolor = "blue"
 document.body.innerHTML=`<my-widget color=${mycolor}></my-widget>`
 ```
 
+Arguments can be passed to an explicit constructor, or as html "attributes" (which I treat as merely props in a constructor), or can be set in defaults. The router (described later) can also pass arguments to new objects being created.
+
 3. Observability: Similar to react and preact you can just set state to force a refresh:
 
 ```javascript
@@ -60,45 +62,14 @@ Note no updates are triggered from sub-property change however:
 widget.palette.primary = "red"
 ```
 
-4. Event driven instantiation:
+5. Rendering on state change:
 
-I prefer to be fairly explicit about managing children layout elements in database driven lists. Typically real applications are going to watch database state and be responsive to that (web apps tend to be multi participant with real time updates across the network to all participants). Also, almost always, there is a parent component that manages a list of elements; so the pattern isn't so much that an object wants to update itself, but rather it has some logic to specifically find and update children in itself - and the children don't have any particular awareness of database state. There are lots of ways to accomplish this pattern. For example:
-
-```javascript
-class DatabaseViewWidget extends SugarElement {
-	connectedCallback() {
-		// connected can be called more than once... you can also use connectedFirstTime()
-		if(!this.observers) {
-			// in this example (using a hypothetical database wrapper) a full refresh of state is triggered
-			this.observers = Services.db.observe({table:"activity",kind:"post",offset:0,limit:10,orderby:"created"},(dbthing)=>{
-				switch(dbthing.transaction) {
-					let elem = this.querySelector(`[id=${dbthing.id}]`)
-					case "remove":
-						elem.remove()
-						break
-					case "insert":
-					case "update":
-						if(!elem) { elem = new MyWidget(); this.append(elem); elem.id = dbthing.id }
-						elem.dbthing = dbthing
-				}
-			})
-		}
-	}
-	disconnectedCallback() {
-		// sometimes it makes sense to stop observing if not visible; it's up to you
-		Services.stop(this.observers)
-	}
-}
-```
-
-5. Instancing in a layout:
-
-Some elements are moderately static - where programmers may set a few details, but designers set the rest. It should be possible for novice designers to use widgets built by programmers and assemble them fairly easily - if the developers are thoughtful. Designers and programmers can even agree on ideas like "provide one example of what this list should show". This is hopefully a reasonable container for a designer to work within.
+Similar to React you supply a render() method which returns a template to render. This is called when an element is built and whenever any observed property in the element changes. You can also call repaint() to force render.
 
 ```javascript
 	render() {
 		let query = db.query({table:"events",uid:db.currentParty.id,offset:0,limit:100})
-		return html`
+		return htmlify`
 			<page>
 				<collection query=${query}>
 					<image-card>example card to show copies of</image-card>
@@ -108,22 +79,52 @@ Some elements are moderately static - where programmers may set a few details, b
 	}
 ```
 
+React encourages you to just repaint all your children. Instead I prefer to explicitly render children in collections myself. Typicaly I will listen to some database state (such as on a remote server) and then hand-manage the rendering of children:
+
+```javascript
+class DatabaseViewWidget extends SugarElement {
+	connectedCallback() {
+		// connected can be called more than once.
+		if(this.observers) return
+		// in this example a database observer starts feeding this code state changes:
+		this.observer = Services.db.observe(this.observer,{table:"activity",kind:"post",offset:0,limit:10,orderby:"created"},(dbthing)=>{
+			switch(dbthing.transaction) {
+				let elem = this.querySelector(`[id=${dbthing.id}]`)
+				case "remove":
+					elem.remove()
+					break
+				case "insert":
+				case "update":
+					if(!elem) { elem = new MyWidget(); this.append(elem); elem.id = dbthing.id }
+					elem.observedproperty = dbthing
+			}
+		})
+	}
+	disconnectedCallback() {
+		// will set this.observer to zero after making sure it is flushed down at database level
+		this.observer = Services.db.observe(this.observer)
+	}
+}
+```
+
 6. Routing and Pages
 
-A SPA website typically shows one page at a time and switches between them. A page is simply an HTMLElement that is registered with the router. The client side router attaches or detaches the page from the dom if it decides it is visible or not - and it manipulates the url in the browser itself so that the user feels like they are actually in a traditional web experience.
+A SPA website typically shows one page at a time and switches between them. A page is simply an HTMLElement that is registered with the router. The client side router attaches or detaches the page from the dom if it decides it is visible or not - and it manipulates the url in the browser itself so that the user feels like they are actually in a traditional web experience (I intercept all requests to go to a new url).
 
-I prefer to push routing out to the developer rather than providing regex style pattern matching. For example I personally like to have routes based on database queries (so that a path can be a persons moniker - similar to Twitter).
+I prefer to push evaluating routes out to the developer rather than providing regex style pattern matching. For example I personally like to have routes based on database queries (so that a path can be a persons moniker - similar to Twitter).
 
-Here's an example:
+Also you can force new pages up with window.history.pushState({},"/path","/path") or by letting users click ordinary hyperlinks with ordinary paths (all paths are intercepted and evaluated, and if local then I stop them from doing their normal page load and instead run the router).
+
+Here's an example routing setup:
 
 ```javascript
 
-export let user_router = (segments) => {
+export let user_stuff_router = (segments) => {
 	if(!segments || segments.length < 1 || segments[0].length==0) {
 		return "splash-page"
 	}
 	switch(segments[0]) {
-		case "profile": return "party-profile-page"
+		case "profile": return {element:"party-profile-page", myargument:123 }
 		case "login": return "party-login-page"
 		case "signout": return "party-signout-page"
 		case "events": return "events-page"
@@ -132,15 +133,13 @@ export let user_router = (segments) => {
 	return "sugar-404-page"
 }
 
-document.addEventListener('DOMContentLoaded', ()=>{
-	htmlify2dom(document.body,htmlify`<sugar-router user_router=${user_router}></sugar-router>`)
-})
+router.push(user_stuff_router)
 
 ```
 
-7. Services and State
+7. Services
 
-There are many small and large kinds of pieces that are helpful for building web-sites such as basic state observability, bindings to real databases and so on. I've included a few snippets and organized them under a "Services" concept. These speak to these points:
+There are many small and large kinds of pieces that are helpful for building web-sites such as basic state observability, bindings to real databases and so on. I've included a few snippets and organized them under a "Services" folder.
 
 View synchronization and state observability in general is a perennial issue that deeply pervades the design of modern web frameworks. A view should change to reflect some state; for example if a user logs out, or if a remote participant deletes an object another user is looking at. People often reach for tools like Redux or MobX here. Other frameworks like Svelte try to magick away these concerns by compiling your logic and having deeper introspection on what state is being painted where. I prefer in general to push view synchronization to the developer; providing some observer like abilities but requiring a developer to apply them to the right DOM elements themselves.
 

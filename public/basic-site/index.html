@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 
-<title>SugarBase</title>
+<title>SugarBase Basic Site</title>
 
 <link rel="icon" href="/art/favicon.ico">
 
@@ -33,16 +33,40 @@
 <meta name="apple-mobile-web-app-title" content="Sugar">
 <meta name="apple-mobile-web-app-status-bar-style" content="#4285F4">
 
+<!-- a built in style -->
+<link type="text/css" rel="stylesheet" href="/sugarbase/style/sugar-mobile.css" />
+
 </head>
 <body>
 </body>
 </html>
 
 <script type=module>
-document.addEventListener('DOMContentLoaded', async () => {
 
-	let {run} = await import("/fancy-site/fancy-site.js")
-	run()
+import '/sugarbase/elements/sugar-element.js'
 
-});
+export class BasicElement extends SugarElement {
+	static defaults = { title:"See not 🙈" }
+	render() {
+		console.log("render is being called with " + this.title)
+		return htmlify`Monkey says: ${this.title}`
+	}
+}
+customElements.define('basic-element', BasicElement )
+
+async function bootup() {
+	htmlify2dom(document.body,
+		htmlify`
+			<sugar-page>
+				<sugar-content>
+					<basic-element>This is outside the render() scope: Hear Not 🙉</basic-element>
+				</sugar-content>
+			</sugar-page`,
+	)
+	let elem = document.body.querySelector('basic-element')
+	elem.title = "Speak not 🙊"	
+}
+
+document.addEventListener('DOMContentLoaded', bootup);
+
 </script>

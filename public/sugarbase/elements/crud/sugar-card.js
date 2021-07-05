@@ -1,7 +1,7 @@
 export class SugarCard extends SugarElement {
 
 	static defaults = {
-		artifact:{title:"nothing",image:"noimage"},
+		artifact:{table:"group",title:"nothing",image:"noimage"},
 		width:"100%",
 		height:"140px",
 	}
@@ -26,9 +26,9 @@ export class SugarCard extends SugarElement {
 			`
 
 		let p_style = `margin:4px`
-
+console.log(this.artifact)
 		this.innerHTML =
-			`<a href="/">
+			`<a href="${this.artifact.volatile.url}">
 			<div style="${inner_div_style}"></div>
 			</a>
 			<p style="${p_style}"> ${this.artifact.title}</p>

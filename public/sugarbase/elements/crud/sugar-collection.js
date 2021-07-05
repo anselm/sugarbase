@@ -10,25 +10,28 @@
 export class SugarCollection extends SugarElement {
 
 	static defaults = {
-		db: 0,
+		observe: 0,
 		query: {table:"party"},
 		card: "sugar-card",
 	}
 
 	connectedCallback() {
-		if(!this.db) return
+		if(!this.observe) return
 		if(this.job) throw "It's slightly unexpected to see this connected and disconnected more than once; is that your intent?"
-		this.job = this.db(this.job,this.query,(results)=>{
+		this.job = this.observe(this.job,this.query,(results)=>{
 			this.insert(results)
 		})
 	}
 
 	disconnectedCallback() {
-		this.job = Services.observe(this.job)
+		console.warn("disconnecting collection")
+		this.job = this.observe(this.job)
 	}
 
 	insert(results) {
 		// this logic talks directly to the dom and bypasses render()
+console.log("****************")
+console.log(results)
 
 		// card to make
 		let cardClass = customElements.get(this.card)

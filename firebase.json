@@ -14,8 +14,8 @@
       "**/node_modules/**"
     ],
     "rewrites": [
-      { "source":"/basic", "destination": "/basic-site.html" },
-      { "source":"**", "destination":"/fancy-site.html" }
+      { "source":"/basic", "destination": "/basic-site/index.html" },
+      { "source":"**", "destination":"/fancy-site/index.html" }
     ],
     "headers": [
       {

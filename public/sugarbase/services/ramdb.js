@@ -9,6 +9,18 @@
 
 class DB {
 
+	constructor() {
+		this.jobcounter = 1
+		this.jobs = {}
+	}
+
+	volatiles(obj) {
+		// TODO MOVE ME! later have a promotion or volatile concept somewhere else
+		if(obj.volatiles) return
+		obj.volatile = {}
+		obj.volatile.url = "/"+obj.table+"/"+obj.id
+	}
+
 	async post(obj) {
 		if(!this.db) this.db = {}
 		if(!this.db[obj.table]) this.db[obj.table] = {}
@@ -17,6 +29,7 @@ class DB {
 		}
 		this.db[obj.table][obj.id] = obj
 		obj.transaction="post"
+		this.volatiles(obj)
 		this._broadcast(obj)
 		return obj
 	}
@@ -71,21 +84,17 @@ class DB {
 	}
 
 	///
-	/// observe changes
-	///		- delete the observer by passing a null callback with the job
-	/// 	- TODO deliver a rollup on initial listen
-	///		- callback must handle arrays or individual items
+	/// observe or stop observing server side changes on a query by example; returning an array of results
 	///
 
 	async observe(job,obj=0,callback=0) {
 
-		if(!this.jobs) this.jobs = {}
 		if(!obj || !callback) {
 			if(job) delete this.jobs[job.id]
 			return 0
 		}
 		if(!job) {
-			let id = this.jobcounter ? this.jobcounter + 1 : 1
+			let id = ++this.jobcounter
 			job = { id:id }
 			await this.freshen(obj,callback)
 		}
@@ -93,12 +102,22 @@ class DB {
 		return job
 	}
 
-	login(user) {
-		if(this.callback) this.callback(user)
+	/// fake login
+
+	login(args) {
+		this.authchange({displayName:args.name})
+	}
+
+	signup(args) {
+		this.authchange({displayName:args.name})
 	}
 
 	signout() {
-		if(this.callback) this.callback(0)
+		this.authchange(0)
+	}
+
+	authchange(args) {
+		if(this.callback) this.callback(args)
 	}
 
 	onauth(callback=0) {

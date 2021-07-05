@@ -1,8 +1,13 @@
 export class SplashPage extends HTMLElement {
 	connectedCallback() {
-		let party = Services.currentParty
+
+
+		let party = Services.state.currentParty
 		let moniker = party ? party.displayName : 0
-		this.className="sugar-page"
+
+console.log("being asked to render splash")
+console.log(party)
+
 		this.innerHTML =
 			`<sugar-page>
 				<sugar-content>

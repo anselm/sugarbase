@@ -1,17 +1,46 @@
 
 # TODO
 
-- style issues?
+	- can i get this up before next week?
+	- groups, events, worlds, artifacts are the main things
 
-	- consider simplifying and reducing the base css styles to be more minimal
-	- rebassjs.org has some nice style ideas that could be used in cards
-	- have a dark style
-	- explore fun effects and layouts a bit - purely as a design exploration
-		- ie; recreate things like https://www.domestika.org/en/courses/1373-psychedelic-animation-with-photoshop-and-after-effect
-		- Also may be worth just enumerating practical transitions and effects:
-		- also : https://www.youtube.com/watch?v=YHQ820W8FRw
+	- improve login to let anybody login ... just make account fake
 
-	? delete style-site -> fold into base
+**********************
+
+	* i revved the nav bar to use newer state sensing
+	* added menu to nav bar
+	* test menu out please
+
+	* groups; you have a crude list of groups now
+	- should really search filter sort and paginate
+
+	* you can add a group with a group edit
+	- error checks all around
+	- make sure full lifecyle
+
+	- have a group detail page
+	- link to edit
+	- list activity here (events) and maybe have an event creator button
+	- link to member list?
+
+	- group edit -> and delete? -> what is convention for deleting dependencies of a group?
+
+	- group members list
+		- link to +
+		- search filter sort
+		- members have a delete button
+		- maybe even show their perms here
+
+i was struggling over team or group
+i feel team is people on one side, which is correct for some projects but too specific for others
+group is any group of people with a common interest
+and in this case it is just for upcoming events mostly
+but in other experiences it may be for posts? in a sense a post can be an event too
+
+
+**********************
+
 
 - basic elements polish
 	- image uploaders with thumb generators
@@ -39,6 +68,22 @@
 	- 3d map
 	- 3d multiplayer space
 
+***************************
+
+- style issues?
+
+	- consider simplifying and reducing the base css styles to be more minimal
+	- rebassjs.org has some nice style ideas that could be used in cards
+	- have a dark style
+	- explore fun effects and layouts a bit - purely as a design exploration
+		- ie; recreate things like https://www.domestika.org/en/courses/1373-psychedelic-animation-with-photoshop-and-after-effect
+		- Also may be worth just enumerating practical transitions and effects:
+		- also : https://www.youtube.com/watch?v=YHQ820W8FRw
+
+	? delete style-site -> fold into base
+
+******************************
+
 - refining the fancy demo; firebase issues
 
 	- test real firebase -> does it mirror the ramdb api?
@@ -55,6 +100,7 @@
 
 	- database schema permissions
 
+************************
 
 generic crud
 

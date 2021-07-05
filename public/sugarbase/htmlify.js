@@ -25,7 +25,9 @@ window.htmlify = htmlify
 export function htmlify2dom(parent=0,node,flush=false) {
 
 	if (!node) {
-		throw "illegal node"
+		console.warn("empty htmlify")
+		return
+//		throw "illegal node"
 	}
 
 	// flush?
@@ -69,6 +71,7 @@ export function htmlify2dom(parent=0,node,flush=false) {
 	if(node.props && node.props.is) {
 		elem = document.createElement(node.props.is, {is:node.type})
 	} else {
+		console.log("Creating " + node.type)
 		elem = document.createElement(node.type)
 	}
 
