@@ -71,7 +71,6 @@ export function htmlify2dom(parent=0,node,flush=false) {
 	if(node.props && node.props.is) {
 		elem = document.createElement(node.props.is, {is:node.type})
 	} else {
-		console.log("Creating " + node.type)
 		elem = document.createElement(node.type)
 	}
 

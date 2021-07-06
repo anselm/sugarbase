@@ -10,29 +10,23 @@ export class SugarForm extends SugarElement {
 
 	static defaults = {
 		width:"100%",
-		height:"140px",
+		height:"140px", // TODO image height - think about where this should be - think about CSS
 		subject:0,
 		schema:0,
 	}
 
-// TODO - if this is missing then it is rendered multipletimes?
-//	connectedCallback() {
-//		if(!this.counter) this.counter = 0
-//		this.counter = this.counter ? this.counter + 1 : 0
-//		console.log("hmmm " + this.counter)
-//	}
-
 	render() {
 
+// DEBUGGING
 		if(!this.hasOwnProperty("counter")) {
 			this.counter = 0;
 		} else {
 			this.counter = this.counter + 1
 		}
-
 		console.log("rendering form " + this.counter + " random " + Math.random() + " what="+this.previous)
 		this.previous = "what" + this.previous
 
+		// use supplied schema?
 		let subject = this.subject || {}
 		let schema = this.schema
 		if(!schema) {
@@ -40,7 +34,7 @@ export class SugarForm extends SugarElement {
 			return "nothing"
 		}
 
-		// TODO think about style management
+		// TODO think about style management - move this out of here
 		this.style=`
 			box-shadow: 3px 3px 10px 0 rgba(0,0,0,0.35);
 			margin-top: 10px;
@@ -59,9 +53,13 @@ export class SugarForm extends SugarElement {
 			`
 
 		let submit = async (args) => {
+			console.log("***** Saving subject as is to DB")
 			console.log(subject)
-			await Services.db.post(subject)
-			// TODO errorchecking
+			// TODO client side db post should do a ton of error checking and then server should also
+			let result = await Services.db.post(subject)
+			// TODO errorchecking on result here as well
+			// TODO go to the right place also... like probably the real thing
+			console.log(result)
 			window.history.pushState({},"/groups","/groups")
 		}
 
@@ -79,30 +77,32 @@ export class SugarForm extends SugarElement {
 
 		let contents = []
 		Object.entries(this.schema).forEach( ([k,v]) => {
-			let prev = subject[k]
+			let prev = subject[k] || ""
 			switch(v.rule) {
 				case "id":
 				case "hidden":
+					break
 				case "string":
-					contents.push(htmlify`<sugar-input is="input" class="sugar-input" id="${k}" oninput=${oninput} placeholder="${prev}"></sugar-input>`)
+					contents.push(htmlify`<p>${v.label}</p><input is="input" class="sugar-input" id="${k}" oninput=${oninput} value="${prev}" placeholder="${prev||""}"></input>`)
 					break
 				case "textarea":
-					contents.push(htmlify`<sugar-text-area is="input" class="sugar-input" id="${k}" oninput=${oninput} placeholder="${prev}"></sugar-text-area>`)
+					contents.push(htmlify`<p>${v.label}</p><text-area is="input" class="sugar-input" id="${k}" oninput=${oninput} value="${prev}" placeholder="${prev||""}"></text-area>`)
 					break
 				case "image":
+					contents.push(htmlify`<p>${v.label}</p><input is="input" class="sugar-input" id="${k}" oninput=${oninput} value="${prev}" placeholder="${prev||""}"></input>`)
 					break
 				case "map":
 					break
 				case "date":
 					break
 				case "submit":
-					contents.push(htmlify`<sugar-button id="${k}" onclick=${submit}>${v.value||k}</sugar-button>`)
+					contents.push(htmlify`<button id="${k}" onclick=${submit}>${v.value||k}</button>`)
 					break
 				case "remove":
-					contents.push(htmlify`<sugar-button id="${k}" onclick=${remove}>${v.value||k}</sugar-button>`)
+					contents.push(htmlify`<button id="${k}" onclick=${remove}>${v.value||k}</button>`)
 					break
 				case "cancel":
-					contents.push(htmlify`<sugar-button id="${k}" onclick=${cancel}>${v.value||k}</sugar-button>`)
+					contents.push(htmlify`<button id="${k}" onclick=${cancel}>${v.value||k}</button>`)
 					break
 				default:
 					break

@@ -8,28 +8,43 @@ export class MenuPage extends HTMLElement {
 
 			<h1>Menu</h1>
 			<br/>
-			<ul>
 
-			<li><a href="/groups/edit">create group</a>
-			<br/>
-			<li><a href="/groups">groups</a>
-			<li><a href="/events">events</a>
-			<li><a href="/worlds">worlds</a>
-			<li><a href="/artifacts">artifacts</a>
-			<br/>
+			<ul>
+			<li><a href="/group/edit">create group</a>
+			</ul>
+
+			<ul>
+			<li><a href="/groups">your groups</a>
+			<li><a href="/events">your events</a>
+			<li><a href="/worlds">your worlds</a>
+			<li><a href="/artifacts">your artifacts</a>
+			</ul>
+
+			<ul>
 			<li><a href="/profile">profile</a>
 			<li><a href="/settings">settings</a>
 			<li><a href="/signout">go to signout</a>
-			<br/>
+			</ul>
+
+			<ul>
 			<li><a href="/about">📜 About</a>
 			<li><a href="/terms">📜 Terms</a>
 			<li><a href="/privacy">📜 Privacy</a>
 			<li><a href="/faq">📜 FAQ</a>
-
 			</ul>
+
 			<font color="white">Login Status: ${moniker}</font>
 			</sugar-content>
-			</sugar-page>`
+			</sugar-page>
+
+<sticky-note contenteditable="true">
+<h2>About the Menu</h2>
+<br/>
+It is easier for users to consolidate actions in one page rather than scattering powers all over.
+</sticky-note>
+
+
+			`
 	}
 }
 customElements.define('menu-page', MenuPage )

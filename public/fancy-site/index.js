@@ -12,6 +12,10 @@ import '/sugarbase/elements/auth/sugar-signup-page.js'
 import '/sugarbase/elements/auth/sugar-signout-page.js'
 import {router} from '/sugarbase/elements/sugar-router.js'
 
+// debug
+
+import '/sugarbase/elements/sticky/sticky-note.js'
+
 // app specific layout
 
 import {NavBarElement} from '/fancy-site/nav-bar-element.js'
@@ -61,7 +65,6 @@ router.unshift( (segments) => {
 // route login
 
 router.push( (segments) => {
-	console.log(segments)
 	if(!segments || segments.length < 1 || segments[0].length==0) return 0
 	switch(segments[0]) {
 		case "login":
@@ -71,6 +74,8 @@ router.push( (segments) => {
 				return { element:"splash-page", state:state }
 			}
 			return {element:"sugar-login-page",login:db.login.bind(db)}
+		case "profile":
+			return {element:"sugar-profile-page"}
 		case "signup":
 			return {element:"sugar-signup-page",signup:db.signup.bind(db)}
 		case "signout":
@@ -88,42 +93,70 @@ router.push( (segments) => {
 	return 0
 })
 
-
 // route groups
 
-router.push( (segments) => {
+router.push( async (segments) => {
 	switch(segments[0]) {
+		case "groups": return "groups-page"
 		case "group":
-			if(segments.length>1 && segments[1] == "edit") return "group-edit-page"
-			return "group-detail-page"
-		case "groups":
-			return "groups-page"
+			if(segments.length>2) {
+				let subject=0
+				let results = await db.query({table:"group",id:parseInt(segments[2])})
+				if(results.length) subject = results[0]
+				switch(segments[1]) {
+					case "edit": return {element:"group-edit-page",subject:subject}
+					case "detail": return {element:"group-detail-page",subject:v}
+					default:
+				}
+			}
 	}
 	return 0
 })
 
-// route members
+// group/1234/edit
+// group/edit/1234
+// group/post/1234
+// group/members/1234
+// group/1234/members/12341234/edit -> although short hand is ok for editing existing?
 
-router.push( (segments) => {
+// route members
+// TODO -> we may want something like /group/members/1234
+// or something?
+
+router.push( async (segments) => {
 	switch(segments[0]) {
+		case "members": return "members-page"
 		case "member":
-			if(segments.length>1 && segments[1] == "edit") return "member-edit-page"
-			return "member-detail-page"
-		case "members":
-			return "members-page"
+			if(segments.length>2) {
+				let subject=0
+				let results = await db.query({table:"member",id:parseInt(segments[2])})
+				if(results.length) subject = results[0]
+				switch(segments[1]) {
+					case "edit": return {element:"member-edit-page",subject:subject}
+					case "detail": return {element:"member-detail-page",subject:subject}
+					default:
+				}
+			}
 	}
 	return 0
 })
 
 // route events
 
-router.push( (segments) => {
+router.push( async (segments) => {
 	switch(segments[0]) {
+		case "events": return "events-page"
 		case "event":
-			if(segments.length>1 && segments[1] == "edit") return "event-edit-page"
-			return "event-detail-page"
-		case "groups":
-			return "events-page"
+			if(segments.length>2) {
+				let subject=0
+				let results = await db.query({table:"event",id:parseInt(segments[2])})
+				if(results.length) subject = results[0]
+				switch(segments[1]) {
+					case "edit": return {element:"event-edit-page",subject:subject}
+					case "detail": return {element:"event-detail-page",subject:subject}
+					default:
+				}
+			}
 	}
 	return 0
 })
@@ -147,7 +180,7 @@ export async function run() {
 		let {db} = await import('/sugarbase/services/firebase.js')
 	} else {
 		let {somedata} = await import('/sugarbase/services/somedata.js')
-		somedata(db)		
+		await somedata(db)		
 	}
 
 	// i prefer to refresh the current page after an auth event so that pages do not have to watch for auth transitions

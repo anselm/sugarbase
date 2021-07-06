@@ -222,9 +222,17 @@ console.log("being asked to show a page " + url)
 		let code = url+kind
 		if(this.producedNames[code]) {
 			inst = this.producedNames[code]
+
+			// write each arg to obj
+			// TODO I think we will move these to props or something
+			Object.entries(args).forEach( ([k,v]) => {
+				inst[k]=v
+			})
 		}
 
 		// else if is a string then try make
+		// pass the args for good luck
+		// TODO should args ALSO be written one by one as above?
 		// TODO it is arguable I may want more than one copy of a given produced class based on url
 		else if (typeof kind === 'string' || kind instanceof String) {
 			if(this.producedClasses[kind]) {

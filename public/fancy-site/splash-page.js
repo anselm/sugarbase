@@ -5,7 +5,7 @@ export class SplashPage extends HTMLElement {
 		let party = Services.state.currentParty
 		let moniker = party ? party.displayName : 0
 
-console.log("being asked to render splash")
+console.log("********** being asked to render splash")
 console.log(party)
 
 		this.innerHTML =
@@ -21,7 +21,16 @@ console.log(party)
 					</ul>
 					<font color="white">Login Status: ${moniker}</font>
 				</sugar-content>
-			</sugar-page>`
+			</sugar-page>
+
+<sticky-note contenteditable="true">
+<h2>Splash Page</h2>
+<br/>
+Typically a splash page helps people get signed in, and/or, if they are signed in, it shows general ambient activity or actions a user can take.
+</sticky-note>
+
+
+			`
 	}
 }
 customElements.define('splash-page', SplashPage )

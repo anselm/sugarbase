@@ -18,7 +18,7 @@ class DB {
 		// TODO MOVE ME! later have a promotion or volatile concept somewhere else
 		if(obj.volatiles) return
 		obj.volatile = {}
-		obj.volatile.url = "/"+obj.table+"/"+obj.id
+		obj.volatile.url = "/"+obj.table+"/detail/"+obj.id
 	}
 
 	async post(obj) {
@@ -51,6 +51,7 @@ class DB {
 
 	async query(obj) {
 			if(!this.db) this.db = {}
+			if(!obj.table) throw "must supply table"
 			if(!this.db[obj.table]) this.db[obj.table] = {}
 			if(obj.id) {
 				let candidate = this.db[obj.table][obj.id]
