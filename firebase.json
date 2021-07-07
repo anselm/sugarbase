@@ -15,7 +15,7 @@
     ],
     "rewrites": [
       { "source":"/basic", "destination": "/basic-site/index.html" },
-      { "source":"**", "destination":"/fancy-site/index.html" }
+      { "source":"**", "destination":"/index.html" }
     ],
     "headers": [
       {
