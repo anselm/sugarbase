@@ -4,6 +4,7 @@ export class SugarCard extends SugarElement {
 		artifact:{table:"group",title:"nothing",image:"noimage"},
 		width:"100%",
 		height:"140px",
+		fancy:0,
 	}
 
 	connectedCallback() {
@@ -13,6 +14,13 @@ export class SugarCard extends SugarElement {
 			margin-top: 10px;
 			margin-bottom: 10px;
 			display:block;
+		`
+
+		// TODO later on have fancier capabilities
+		if(this.fancy == "inline") this.style=`
+			display:inline-block;
+			width:40%;
+			margin:8px;
 		`
 
 		let inner_div_style=`

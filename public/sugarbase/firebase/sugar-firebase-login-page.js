@@ -1,12 +1,11 @@
 
-import "https://www.gstatic.com/firebasejs/ui/4.8.0/firebase-ui-auth.js"
-
 // css - you may want to statically declare these in header to reduce flickering
-
 let url = "https://www.gstatic.com/firebasejs/ui/4.8.0/firebase-ui-auth.css"
 document.head.innerHTML += `<link type="text/css" rel="stylesheet" href="${url}">`
 
-class PartyLoginFirebasePage extends HTMLElement {
+import "https://www.gstatic.com/firebasejs/ui/4.8.0/firebase-ui-auth.js"
+
+class SugarFirebaseLoginPage extends HTMLElement {
 
 	connectedCallback() {
 
@@ -68,5 +67,5 @@ class PartyLoginFirebasePage extends HTMLElement {
 
 }
 
-customElements.define('party-login-page', PartyLoginFirebasePage )
+customElements.define('sugar-firebase-login-page', SugarFirebaseLoginPage )
 

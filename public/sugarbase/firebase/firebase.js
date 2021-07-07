@@ -8,7 +8,7 @@ let firestore = firebase.firestore()
 
 class FireDB = {
 
-	authchange(user=0) {
+	authenticate(user=0) {
 		// login is not handled here but rather magically calls onauth due to firebase
 		if(user) return
 		// logout... (which will trigger an onauth as well by firebase)

@@ -1,5 +1,5 @@
 
-export class MembersPage extends SugarElement {
+export class ActivitiesPage extends SugarElement {
 	// must be associated with group
 	render() {
 		if(!this.parent || !this.parent.id) throw "must have a parent"
@@ -8,12 +8,12 @@ export class MembersPage extends SugarElement {
 				<sugar-content>
 					<h1>Group: ${this.parent.title}</h1>
 					<sugar-card artifact=${this.parent}></sugar-card>
-					<h3>Members in this group:</h3>
-					<a href="/group/${this.parent.id}/member/create">[Create a new member in this group]</a>
+					<h3>Activities in this group:</h3>
+					<a href="/group/${this.parent.id}/activity/create">[Create a new activity in this group]</a>
 					<br/>
 					<sugar-collection
 						observe=${Services.db.observe.bind(Services.db)}
-						query=${{table:"member",parentid:this.parent.id}}
+						query=${{table:"activity",parentid:this.parent.id}}
 						card="sugar-card">
 					</sugar-collection>
 				</sugar-content>
@@ -21,10 +21,9 @@ export class MembersPage extends SugarElement {
 			`
 	}
 }
-customElements.define('members-page', MembersPage )
+customElements.define('activities-page', ActivitiesPage )
 
-
-export class MemberDetailPage extends SugarElement {
+export class ActivityDetailPage extends SugarElement {
 	static defaults = {
 		subject:0 // if subject changes then force update
 	}
@@ -37,41 +36,57 @@ export class MemberDetailPage extends SugarElement {
 		return htmlify`
 			<sugar-page>
 				<sugar-content>
-					<h1>Member: ${this.subject.title}</h1>
+					<h1>Activity: ${this.subject.title}</h1>
 					<sugar-card artifact=${this.subject}></sugar-card>
-					<a href="/group/${parentid}/member/${id}/edit">[Edit this member]</a>
+					<a href="/group/${parentid}/activity/${id}/edit">[Edit this activity]</a>
 					<br/>
-					<h3>Permissions on this member:</h3>
+					<h3>Comments on this activity:</h3>
 					<sugar-collection
 						observe=${Services.db.observe.bind(Services.db)}
-						query=${{table:"permissions",parentid:id}}
+						query=${{table:"response",parentid:id}}
 						card="sugar-card">
 					</sugar-collection>
 				</sugar-content>
 			</sugar-page>
+
+
+<sticky-note contenteditable="true">
+<h2>An activity</h2>
+<br/>
+Activities are something that can happen within a group.
+An admin can make an activity.
+Activities may have a start and end date and a room.
+Everybody in the group is always invited to every activity in the group.
+</sticky-note>
+
+
 			`
 	}
 }
-customElements.define('member-detail-page', MemberDetailPage )
+customElements.define('activity-detail-page', ActivityDetailPage )
 
 
 ///
 /// Caller is expected to inject a subject
 ///
 
-export class MemberEditPage extends SugarElement {
+export class ActivityEditPage extends SugarElement {
 	static defaults = {
 		subject:0 // if subject changes then force update
 	}
 	render() {
 
 		let subject = this.subject
-		if(!subject) subject = {table:"member",parentid:this.parent.id}
+		if(!subject) subject = {table:"activity",parentid:this.parent.id}
 
 		let schema = {
 			id:     {rule:"id",       },
 			title:  {rule:"string",   label:"Title"  },
-			profile:  {rule:"string",    label:"Link to Profile"},
+			descr:  {rule:"textarea", label:"Description" },
+			image:  {rule:"image",    label:"Image"},
+			start:  {rule:"date",     label:"Begins at"},
+			end:    {rule:"date",     label:"Ends at"},
+			room:   {rule:"string",   label:"Takes place in room named:"},
 			submit: {rule:"submit",   label:"Submit" },
 			remove: {rule:"remove",   label:"Delete" },
 			cancel: {rule:"cancel",   label:"Cancel" },
@@ -86,52 +101,14 @@ export class MemberEditPage extends SugarElement {
 			}
 		}
 
-
-		let permissions = [
-
-		"May edit group",
-		"May add activities",
-		"May edit activities",
-		"May delete activity",
-		"May add members",
-		"May edit members",
-		"May remove members",
-
-		"Is silenced",
-		"Is immobilized",
-		"Is not teleportable",
-		"Is blocking person",
-		"Has color [color picker]",
-
-		"May edit activity # ",
-		"May fly in activity # ",
-		"May teleport in activity # ",
-		"May use megaphone in activity # ",
-		"May kick people from activity # ",
-		"May add or remove objects from activity # ",
-		"May elevate permissions in activity # ",
-
-		"May silence people in activity #",
-
-		]
-
-		let str = ""
-		permissions.forEach(p=> {
-			str += `<a href=''>${p}</a><br/>`
-		})
-
 		return htmlify`
 			<sugar-page>
 				<sugar-content>
-					<h1>${subject.id?"Edit":"Create"} Member</h1>
+					<h1>${subject.id?"Edit":"Create"} Activity</h1>
 					<sugar-form subject=${subject} schema=${schema} submit=${submit}></sugar-form>
-					<h3>Member Permissions in this Group</h3>
-					<div>
-						${str}
-					</div>
 				</sugar-content>
 			</sugar-page>`
 	}
 }
 
-customElements.define('member-edit-page', MemberEditPage )
+customElements.define('activity-edit-page', ActivityEditPage )

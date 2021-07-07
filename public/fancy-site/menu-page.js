@@ -15,7 +15,6 @@ export class MenuPage extends HTMLElement {
 
 			<ul>
 			<li><a href="/groups">your groups</a>
-			<li><a href="/events">your events</a>
 			<li><a href="/worlds">your worlds</a>
 			<li><a href="/artifacts">your artifacts</a>
 			</ul>
@@ -38,9 +37,18 @@ export class MenuPage extends HTMLElement {
 			</sugar-page>
 
 <sticky-note contenteditable="true">
-<h2>About the Menu</h2>
+<h2>About this Menu</h2>
 <br/>
-It is easier for users to consolidate actions in one page rather than scattering powers all over.
+For convenience most powers can be accessed here.
+<br/>
+<br/>
+Groups are the main organizing principle. You may be a member of multiple groups and there may be public groups you can join.
+<br/>
+<br/>
+Worlds will be a list of rooms that you can use when creating activities in a Group.
+<br/>
+<br/>
+Artifacts is an idea that you may have some of your own artifacts that you can carry around.
 </sticky-note>
 
 

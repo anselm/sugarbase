@@ -1,5 +1,5 @@
-export class SplashPage extends HTMLElement {
-	connectedCallback() {
+export class SplashPage extends SugarElement {
+	render() {
 
 
 		let party = Services.state.currentParty
@@ -8,18 +8,26 @@ export class SplashPage extends HTMLElement {
 console.log("********** being asked to render splash")
 console.log(party)
 
-		this.innerHTML =
+		return htmlify
 			`<sugar-page>
 				<sugar-content>
 					<h1>Hello World!</h1>
 					<br/>
 					Actions you may take here:
 					<ul>
-						<li style="display:${moniker?"none":"normal"}"><a href="/login">go to login</a>
-						<li style="display:${moniker?"normal":"none"}"><a href="/profile">go to your page</a>
-						<li style="display:${moniker?"normal":"none"}"><a href="/signout">go to signout</a>
+						<li style="display:${moniker?"none":"normal"}"><a href="/login">go to login</a></li>
+						<li style="display:${moniker?"normal":"none"}"><a href="/profile">go to your page</a></li>
+						<li style="display:${moniker?"normal":"none"}"><a href="/signout">go to signout</a></li>
 					</ul>
 					<font color="white">Login Status: ${moniker}</font>
+
+					<h1>Public Group Areas</h1>
+					<sugar-collection
+						observe=${Services.db.observe.bind(Services.db)}
+						query=${{table:"group",visibility:"public"}}
+						card="sugar-card-medium">
+					</sugar-collection>
+
 				</sugar-content>
 			</sugar-page>
 

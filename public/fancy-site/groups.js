@@ -5,12 +5,12 @@ export class GroupsPage extends SugarElement {
 			<sugar-page>
 				<sugar-content>
 					<h1>List of Groups</h1>
-					<a href="/group/edit">[Create a group now]</a>
+					<a href="/group/create">[Create a group now]</a>
 					<br/>
 					<sugar-collection
 						observe=${Services.db.observe.bind(Services.db)}
 						query=${{table:"group"}}
-						card="sugar-card">
+						card="sugar-card-medium">
 					</sugar-collection>
 				</sugar-content>
 			</sugar-page>
@@ -28,32 +28,35 @@ customElements.define('groups-page', GroupsPage )
 
 export class GroupDetailPage extends SugarElement {
 	static defaults = {
-		subject:{}
+		subject:0 // if subject changes then force update
 	}
 	render() {
 		if(!this.subject || !this.subject.id) return
 		let id = this.subject.id
-		console.log("**** looking at a group in detail")
-		console.log(this.subject)
 
 		return htmlify`
 			<sugar-page>
 				<sugar-content>
 					<h1>Group: ${this.subject.title}</h1>
 					<sugar-card artifact=${this.subject}></sugar-card>
-					<a href="/event/edit">[Create an event in this group]</a>
+					<a href="/group/${id}/edit">[Edit this group]</a>
 					<br/>
-					<a href="/group/edit/${id}">[Edit this group]</a>
+					<a href="/group/${id}/activity/create">[Create a new activity in this group]</a>
 					<br/>
-					<a href="/group/members/${id}">[Browse members]</a>
+					<a href="/group/${id}/members">[Browse members]</a>
 					<br/>
-					<h3>Upcoming events in this group:</h3>
+					<h3>Upcoming activities:</h3>
 					<sugar-collection
 						observe=${Services.db.observe.bind(Services.db)}
-						query=${{table:"event",parent:id}}
+						query=${{table:"activity",parentid:id,age:"new"}}
 						card="sugar-card">
 					</sugar-collection>
-					<h3>Older events in this group:</h3>
+					<h3>Previous activities:</h3>
+					<sugar-collection
+						observe=${Services.db.observe.bind(Services.db)}
+						query=${{table:"activity",parentid:id,age:"old"}}
+						card="sugar-card">
+					</sugar-collection>
 					<br/>
 				</sugar-content>
 			</sugar-page>
@@ -62,56 +65,53 @@ export class GroupDetailPage extends SugarElement {
 <sticky-note contenteditable="true">
 <h2>A Group Detail</h2>
 <br/>
-This page show important activity related to a group, such as upcoming events.
-It also shows legacy activity, such as past events.
-Also provides a way to browse the members of this group.
+Groups are the core organizing concept of this system.
+An admin can create a group and invite their team to it.
+This page shows fresh activity related to the group.
+It also allows some users to edit the group.
 </sticky-note>
-
-
 			`
 	}
 }
 customElements.define('group-detail-page', GroupDetailPage )
 
+///
+/// Caller is expected to inject a subject
+///
 
 export class GroupEditPage extends SugarElement {
 	static defaults = {
-		virgin:{
-			id:0,
-			table:"group",
-			title:"",
-			url:"",
-		},
-		subject:{}
+		subject:0 // if subject changes then force update
 	}
 	render() {
 
 		let subject = this.subject
-
-// get rid of defaults
-
-console.log("**** being asked to render group edit page ...")
-console.log(subject)
+		if(!subject) subject = {table:"group"}
 
 		let schema = {
 			id:     {rule:"id",       },
-			title:  {rule:"string",  label:"Title"  },
+			title:  {rule:"string",   label:"Title"  },
 			descr:  {rule:"textarea", label:"Description" },
-//			url:    {rule:"string",  label:"Image"  },
 			image:  {rule:"image",    label:"Image"},
-			map:    {rule:"map",      },
-			start:  {rule:"date",     },
-			end:    {rule:"date",     },
 			submit: {rule:"submit",   label:"Submit" },
 			remove: {rule:"remove",   label:"Delete" },
 			cancel: {rule:"cancel",   label:"Cancel" },
+		}
+
+		let submit = async (subject) => {
+			let result = await Services.db.post(subject)
+			if(result && result.id) {
+				window.history.pushState({},result.volatile.url,result.volatile.url)
+			} else {
+				alert("Could not post!")
+			}
 		}
 
 		return htmlify`
 			<sugar-page>
 				<sugar-content>
 					<h1>${subject.id?"Edit":"Create"} Group</h1>
-					<sugar-form subject=${subject} schema=${schema}></sugar-form>
+					<sugar-form subject=${subject} schema=${schema} submit=${submit}></sugar-form>
 				</sugar-content>
 			</sugar-page>`
 	}

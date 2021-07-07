@@ -3,7 +3,7 @@
 /// bring in an html tagged template parser function and something to actually build html
 ///
 
-import {htmlify,htmlify2dom} from '../htmlify.js'
+import {htmlify,htmlify2dom} from './htmlify.js'
 
 //export htmlify
 //export htmlify2dom
@@ -18,6 +18,8 @@ export class SugarElement extends HTMLElement {
 
 		// build super class
 		super()
+
+		this.debug = 1
 
 		let elem = this
 
@@ -39,11 +41,10 @@ export class SugarElement extends HTMLElement {
 			})
 		}
 
-		// todo arguably could deep clone
-		this.props = props || {}
+		// keep a reference to a copy of ALL the raw properties passed to this entity
+		this.props = {...props} || {}
 
-		// set props - before setting up responders
-		// set to defaults only if props are not set and if defaults exist
+		// for properties that are ALSO in defaults, set them to defaults UNLESS supplied
 		if(this.constructor.defaults) {
 			Object.entries(this.constructor.defaults).forEach(([key,val])=>{
 				// set default if prop not set
@@ -55,8 +56,7 @@ export class SugarElement extends HTMLElement {
 			})
 		}
 
-
-		// sugar uses an idea of 'defaults' which it will observe and signal upwards
+		// for all defaults specifically create getters and setters directly on base - but ONLY on defaults (because they trigger a repaint)
 		if(this.constructor.defaults) {
 			Object.entries(this.constructor.defaults).forEach(([key,val])=>{
 				Object.defineProperty(elem, key, {
@@ -71,14 +71,14 @@ export class SugarElement extends HTMLElement {
 			})
 		}
 
-		// todo - could use a settimeout and then set the attributes
+		// todo - could use a settimeout and then set the attributes - otherwise due to custom element design limits it is not possible to set these
 	}
 
 	//////////////////////////////////////////////////// events
 
 	propChanged(key,value) {
-		// for now permit subclassing and then avoids updating if desired
-		console.log("prop change " + key + " " + value)
+		// subclass this if you want to stop auto-updating - TODO think of nicer ways; such as bundles of changes?
+		if(this.debug) console.warn("sugar-element: prop change " + key + " " + value)
 		this.rerender()
 	}
 
@@ -91,20 +91,19 @@ export class SugarElement extends HTMLElement {
 				this.connectedFirstTime()
 			}
 			if(this.renderOnce) {
-				console.log("rendering once")
+				if(this.debug) console.warn("sugar-element: calling special render once")
 				htmlify2dom(this,this.renderOnce(),true)
-				// TODO do i want to fall through here? examine
+				return
 			}
 		}
-		if(this.connected) console.warn("calling connected twice " + this.connected)
-			this.connected = this.connected ? this.connected + 1 : 1
-		console.log("connected thing ... " + this.constructor.name + " times=" + this.connected)
+		this.connected = this.connected ? this.connected + 1 : 1
+		if(this.debug) console.warn("sugar-element: connected thing ... " + this.constructor.name + " iteration=" + this.connected)
 		this.rerender()
 	}
 
 	rerender() {
 		if(!this.render) return
-			console.log("re rendering... ..."  + this.constructor.name)
+		if(this.debug) console.warn("sugar-element: rerender() called... (may be first render or a force update notification) for "  + this.constructor.name)
 		htmlify2dom(this,this.render(),true)
 	}
 

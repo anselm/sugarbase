@@ -13,6 +13,7 @@ export class SugarForm extends SugarElement {
 		height:"140px", // TODO image height - think about where this should be - think about CSS
 		subject:0,
 		schema:0,
+		submit:0,
 	}
 
 	render() {
@@ -52,16 +53,7 @@ export class SugarForm extends SugarElement {
 			background-image: url(${schema.image});
 			`
 
-		let submit = async (args) => {
-			console.log("***** Saving subject as is to DB")
-			console.log(subject)
-			// TODO client side db post should do a ton of error checking and then server should also
-			let result = await Services.db.post(subject)
-			// TODO errorchecking on result here as well
-			// TODO go to the right place also... like probably the real thing
-			console.log(result)
-			window.history.pushState({},"/groups","/groups")
-		}
+		let submitter = () => { this.submit(subject) }
 
 		let remove = () => {
 			// 
@@ -82,6 +74,7 @@ export class SugarForm extends SugarElement {
 				case "id":
 				case "hidden":
 					break
+				case "date":
 				case "string":
 					contents.push(htmlify`<p>${v.label}</p><input is="input" class="sugar-input" id="${k}" oninput=${oninput} value="${prev}" placeholder="${prev||""}"></input>`)
 					break
@@ -96,7 +89,7 @@ export class SugarForm extends SugarElement {
 				case "date":
 					break
 				case "submit":
-					contents.push(htmlify`<button id="${k}" onclick=${submit}>${v.value||k}</button>`)
+					contents.push(htmlify`<button id="${k}" onclick=${submitter}>${v.value||k}</button>`)
 					break
 				case "remove":
 					contents.push(htmlify`<button id="${k}" onclick=${remove}>${v.value||k}</button>`)
