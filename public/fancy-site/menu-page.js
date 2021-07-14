@@ -21,6 +21,7 @@ export class MenuPage extends HTMLElement {
 
 			<ul>
 			<li><a href="/profile">profile</a>
+			<li><a href="/avatar">avatar</a>
 			<li><a href="/settings">settings</a>
 			<li><a href="/signout">go to signout</a>
 			</ul>

@@ -16,7 +16,6 @@ window.Services = {
 
 db.volatile = function(obj) {
 	obj.volatile = {}
-	console.log(obj)
 	switch(obj.table) {
 		case "activity":
 			obj.volatile.url = `/group/${obj.parentid}/${obj.table}/${obj.id}`
@@ -27,7 +26,6 @@ db.volatile = function(obj) {
 		default:
 			obj.volatile.url = `/${obj.table}/${obj.id}`
 	}
-	console.log(obj.volatile.url)
 }
 
 db.routing = function(tablename) {
@@ -65,12 +63,14 @@ import '/sugarbase/crud/sugar-form.js'
 import '/sugarbase/crud/sugar-decorators.js'
 import '/sugarbase/error/sugar-404-page.js'
 import '/sugarbase/sticky/sticky-note.js'
+import '/sugarbase/threed/sugar-three-element.js'
 
 import '/fancy-site/splash-page.js'
 import '/fancy-site/menu-page.js'
 import '/fancy-site/groups.js'
 import '/fancy-site/activities.js'
 import '/fancy-site/members.js'
+import '/fancy-site/avatar.js'
 
 import {NavBarElement} from '/fancy-site/nav-bar-element.js'
 
@@ -108,6 +108,7 @@ router.push( (segments) => {
 //	/group/5000/member/1234/edit
 
 router.push( async (segments) => {
+	if(segments[0] == "avatar") return "avatar-page"
 	if(segments[0] == "groups") return "groups-page"
 	if(segments[0] != "group") return 0
 	if(segments.length < 2) return 0

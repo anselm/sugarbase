@@ -11,7 +11,7 @@ console.log(party)
 		return htmlify
 			`<sugar-page>
 				<sugar-content>
-					<h1>Hello World!</h1>
+					<h1>Hello x!</h1>
 					<br/>
 					Actions you may take here:
 					<ul>
@@ -27,7 +27,6 @@ console.log(party)
 						query=${{table:"group",visibility:"public"}}
 						card="sugar-card-medium">
 					</sugar-collection>
-
 				</sugar-content>
 			</sugar-page>
 

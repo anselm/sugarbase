@@ -4,7 +4,7 @@ const port = 3456
 
 app.use(express.static('public'))
 
-//app.get('/basic', (req, res) => { res.sendFile(__dirname + '/public/basic-site/index.html') })
+app.get('/basic', (req, res) => { res.sendFile(__dirname + '/public/basic-site/index.html') })
 
 app.get('/*', (req, res) => { res.sendFile(__dirname + '/public/index.html') })
 
