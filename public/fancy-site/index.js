@@ -41,8 +41,11 @@ import '/sugarbase/fakedb/sugar-profile-page.js'
 import '/sugarbase/fakedb/sugar-signup-page.js'
 import '/sugarbase/fakedb/sugar-signout-page.js'
 
+import '/sugarbase/firebase/sugar-firebase-login-page.js'
+
 router.push( (segments) => {
 	switch(segments.length == 1 ? segments[0] : "") {
+		case "fblogin":   return {element:"sugar-firebase-login-page",nextpage:"/profile",authenticate:db.authenticate}
 		case "login":   return {element:"sugar-login-page",nextpage:"/profile",authenticate:db.authenticate}
 		case "profile": return {element:"sugar-profile-page"}
 		case "signup":  return {element:"sugar-signup-page",nextpage:"/profile",authenticate:db.authenticate}
@@ -164,7 +167,6 @@ export async function run() {
 	// use firebase or not?
 
 	if(FIREBASE) {
-		await import('/sugarbase/firebase/sugar-firebase-login-page.js')
 		let {db} = await import('/sugarbase/firebase/firebase.js')
 	} else {
 		let {fakedata} = await import('/sugarbase/fakedb/fakedata.js')

@@ -10,7 +10,7 @@ export class MenuPage extends HTMLElement {
 			<br/>
 
 			<ul>
-			<li><a href="/group/edit">create group</a>
+			<li><a href="/group/create">create group</a>
 			</ul>
 
 			<ul>

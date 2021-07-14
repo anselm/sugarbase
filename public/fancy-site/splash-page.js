@@ -16,6 +16,7 @@ console.log(party)
 					Actions you may take here:
 					<ul>
 						<li style="display:${moniker?"none":"normal"}"><a href="/login">go to login</a></li>
+						<li style="display:${moniker?"none":"normal"}"><a href="/fblogin">firebase login</a></li>
 						<li style="display:${moniker?"normal":"none"}"><a href="/profile">go to your page</a></li>
 						<li style="display:${moniker?"normal":"none"}"><a href="/signout">go to signout</a></li>
 					</ul>

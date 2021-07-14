@@ -1,4 +1,12 @@
 
+import "/__/firebase/8.6.8/firebase-app.js"
+import "/__/firebase/8.6.8/firebase-auth.js"
+import "/__/firebase/8.6.8/firebase-firestore.js"
+import "/__/firebase/init.js?useEmulator=true"
+
+let firestore = firebase.firestore()
+
+
 // css - you may want to statically declare these in header to reduce flickering
 let url = "https://www.gstatic.com/firebasejs/ui/4.8.0/firebase-ui-auth.css"
 document.head.innerHTML += `<link type="text/css" rel="stylesheet" href="${url}">`
