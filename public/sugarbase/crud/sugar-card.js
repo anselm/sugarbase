@@ -1,7 +1,7 @@
 export class SugarCard extends SugarElement {
 
 	static defaults = {
-		artifact:{table:"group",title:"nothing",image:"noimage"},
+		artifact:0,
 		width:"100%",
 		height:"140px",
 		fancy:0,
@@ -23,6 +23,8 @@ export class SugarCard extends SugarElement {
 			margin:8px;
 		`
 
+		let artifact = this.artifact || { image:"", title:"", volatile:{url:""}}
+
 		let inner_div_style=`
 			width:${this.width};
 			height:${this.height};
@@ -30,15 +32,15 @@ export class SugarCard extends SugarElement {
 			background-repeat: no-repeat;
 			background-size: cover;
 			background-color: hsl(${360*Math.random()},${25+70*Math.random()}%,${85+10*Math.random()}%);
-			background-image: url(${this.artifact.image});
+			background-image: url(${artifact.image});
 			`
 
 		let p_style = `margin:4px`
 		this.innerHTML =
-			`<a href="${this.artifact.volatile.url}">
+			`<a href="${artifact.volatile.url}">
 			<div style="${inner_div_style}"></div>
 			</a>
-			<p style="${p_style}"> ${this.artifact.title}</p>
+			<p style="${p_style}"> ${artifact.title}</p>
 			`
 	}
 }

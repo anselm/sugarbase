@@ -75,5 +75,5 @@ class SugarFirebaseLoginPage extends HTMLElement {
 
 }
 
-customElements.define('sugar-firebase-login-page', SugarFirebaseLoginPage )
+customElements.define('sugar-login-page', SugarFirebaseLoginPage )
 

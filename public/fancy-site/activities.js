@@ -86,7 +86,7 @@ export class ActivityEditPage extends SugarElement {
 			image:  {rule:"image",    label:"Image"},
 			start:  {rule:"date",     label:"Begins at"},
 			end:    {rule:"date",     label:"Ends at"},
-			room:   {rule:"string",   label:"Takes place in room named:"},
+			location: {rule:"string",   label:"Takes place in room named:"},
 			submit: {rule:"submit",   label:"Submit" },
 			remove: {rule:"remove",   label:"Delete" },
 			cancel: {rule:"cancel",   label:"Cancel" },

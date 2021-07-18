@@ -11,7 +11,7 @@ export class GroupsPage extends SugarElement {
 						observe=${Services.db.observe.bind(Services.db)}
 						query=${{table:"group"}}
 						card="sugar-card-medium">
-					</sugar-collection>
+					/>
 				</sugar-content>
 			</sugar-page>
 
@@ -48,15 +48,9 @@ export class GroupDetailPage extends SugarElement {
 					<h3>Upcoming activities:</h3>
 					<sugar-collection
 						observe=${Services.db.observe.bind(Services.db)}
-						query=${{table:"activity",parentid:id,age:"new"}}
-						card="sugar-card">
-					</sugar-collection>
+						query=${{table:"activity",parentid:id}}
+					></sugar-collection>
 					<h3>Previous activities:</h3>
-					<sugar-collection
-						observe=${Services.db.observe.bind(Services.db)}
-						query=${{table:"activity",parentid:id,age:"old"}}
-						card="sugar-card">
-					</sugar-collection>
 					<br/>
 				</sugar-content>
 			</sugar-page>
@@ -92,6 +86,7 @@ export class GroupEditPage extends SugarElement {
 			id:     {rule:"id",       },
 			title:  {rule:"string",   label:"Title"  },
 			descr:  {rule:"textarea", label:"Description" },
+			visibility:  {rule:"string", label:"Visibility" },
 			image:  {rule:"image",    label:"Image"},
 			submit: {rule:"submit",   label:"Submit" },
 			remove: {rule:"remove",   label:"Delete" },
@@ -99,6 +94,7 @@ export class GroupEditPage extends SugarElement {
 		}
 
 		let submit = async (subject) => {
+			subject.table = "group"
 			let result = await Services.db.post(subject)
 			if(result && result.id) {
 				window.history.pushState({},result.volatile.url,result.volatile.url)

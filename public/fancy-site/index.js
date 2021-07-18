@@ -5,7 +5,8 @@
 
 import '/sugarbase/core/sugar-element.js'
 
-import {db} from '/sugarbase/fakedb/fakedb.js'
+import {db} from '/sugarbase/firebase/firebase.js'
+//import {db} from '/sugarbase/fakedb/fakedb.js'
 import {state} from '/sugarbase/utils/state.js'
 import {router} from '/sugarbase/core/sugar-router.js'
 
@@ -17,7 +18,10 @@ window.Services = {
 db.volatile = function(obj) {
 	obj.volatile = {}
 	switch(obj.table) {
-		case "activity":
+		case "group":
+			obj.volatile.url = `/group/${obj.id}/`
+			break
+		case "activity": // TBD
 			obj.volatile.url = `/group/${obj.parentid}/${obj.table}/${obj.id}`
 			break
 		case "member":
@@ -36,12 +40,12 @@ db.routing = function(tablename) {
 // authentication support
 ////////////////////////////////////////////////////////////////////////
 
-import '/sugarbase/fakedb/sugar-login-page.js'
+import '/sugarbase/firebase/sugar-firebase-login-page.js'
+//import '/sugarbase/fakedb/sugar-login-page.js'
 import '/sugarbase/fakedb/sugar-profile-page.js'
 import '/sugarbase/fakedb/sugar-signup-page.js'
 import '/sugarbase/fakedb/sugar-signout-page.js'
 
-import '/sugarbase/firebase/sugar-firebase-login-page.js'
 
 router.push( (segments) => {
 	switch(segments.length == 1 ? segments[0] : "") {
@@ -111,28 +115,38 @@ router.push( (segments) => {
 //	/group/5000/member/1234/edit
 
 router.push( async (segments) => {
+	// avatar
 	if(segments[0] == "avatar") return "avatar-page"
+	// groups
 	if(segments[0] == "groups") return "groups-page"
+	// everything that starts with group
 	if(segments[0] != "group") return 0
 	if(segments.length < 2) return 0
+	// create a group
 	if(segments[1] == "create") return {element:"group-edit-page",subject:0}
-	let groupid = parseInt( segments[1] ) || 0
+	// a specific group
+	let groupid = segments[1]
 	if(!groupid) return 0
-	let group = await db.byid("group",groupid)
-	if(!group) return 0
+	let results = await db.query({table:"group",id:groupid})
+	if(!results || !results.length) return 0
+	let group = results[0]
+	// a group detail area
 	if(segments.length < 3) return {element:"group-detail-page",subject:group}
+	// /group/[id]/edit
 	if(segments[2] == "edit") return {element:"group-edit-page",subject:group}
-	//if(segments[2] == "activities") return {element:"activities-page",parent:group}
+	// not used - if(segments[2] == "activities") return {element:"activities-page",parent:group}
+	// /group/[id]/activity
 	if(segments[2] == "activity") {
 		if(segments.length < 4) return 0
 		if(segments[3] == "create") return {element:"activity-edit-page",parent:group,subject:0}
-		let id = parseInt( segments[3] ) || 0
-		if(!id) return 0
-		let activity = await db.byid("activity",id)
-		if(!activity) return 0
+		let id = segments[3]
+		let results = await db.query({table:"activity",id:id})
+		if(!results || !results.length) return 0
+		let activity = results[0]
 		if(segments.length < 5) return {element:"activity-detail-page",parent:group,subject:activity}
 		if(segments[4] == "edit") return {element:"activity-edit-page",parent:group,subject:activity}
 	}
+	// /group/[id]/member(s)
 	if(segments[2] == "members") return {element:"members-page",parent:group}
 	if(segments[2] == "member") {
 		if(segments.length < 4) return 0
@@ -159,30 +173,14 @@ router.push( ()=> { return "sugar-404-page" })
 
 document.body.appendChild( new NavBarElement() )
 
-// boot up
-let FIREBASE = false
-
 export async function run() {
-
-	// use firebase or not?
-
-	if(FIREBASE) {
-		let {db} = await import('/sugarbase/firebase/firebase.js')
-	} else {
-		let {fakedata} = await import('/sugarbase/fakedb/fakedata.js')
-		await fakedata(db)		
-	}
 
 	// i prefer to refresh the current page after an auth event so that pages do not have to watch for auth transitions
 
 	db.onauth( (user)=> {
-		console.warn("******** Forcing re-render due to auth change!")
+		console.warn("******** Index Page has received an auth event; repainting display")
 		state.set({currentParty:user})
 		router.reset()
 	})
-
-	// fake an auth if not using a real datastore
-
-	if(!FIREBASE) db.authenticate(0)
 
 }

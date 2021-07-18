@@ -15,7 +15,7 @@ class DB {
 		this.authenticate = this.authenticate.bind(this) // bind more aggressively...
 	}
 
-	volatile() {} // subclass for transient state - useful for layout
+	volatile(obj) { return obj }
 
 	async post(obj) {
 		// shallow clone
@@ -64,13 +64,13 @@ class DB {
 			let candidate = this.db[obj.table][obj.id]
 			return candidate ? [candidate] : []
 		}
-		let candidates = []
-		Object.values(this.db[obj.table]).forEach(candidate=>{
-			if ( Object.keys(obj).every(key => obj[key] === candidate[key]) ) {
-				candidates.push(candidate)
+		let results = []
+		Object.values(this.db[obj.table]).forEach(result=>{
+			if ( Object.keys(obj).every(key => obj[key] === result[key]) ) {
+				results.push(result)
 			}
 		})
-		return candidates
+		return results
 	}
 
 	///
@@ -130,8 +130,17 @@ class DB {
 		if(this.callback) this.callback(args)
 	}
 
-	onauth(callback=0) {
+	async onauth(callback=0) {
+
 		this.callback=callback
+
+		// throw in some helpful data and then pretend we have an auth transition event
+		if(!this.latch) {
+			this.latch = 1
+			let {fakedata} = await import('/sugarbase/fakedb/fakedata.js')
+			await fakedata(db)
+			callback()
+		}
 	}
 
 }

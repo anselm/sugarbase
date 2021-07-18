@@ -67,6 +67,7 @@ export function htmlify2dom(parent=0,node,flush=false) {
 //		console.log("noticed " + node.type)
 //	}
 
+console.warn("htmlify: About to create " + node.type)
 	// magick "is" properties
 	if(node.props && node.props.is) {
 		elem = document.createElement(node.props.is, {is:node.type})
@@ -95,6 +96,13 @@ export function htmlify2dom(parent=0,node,flush=false) {
 			}
 		})
 	}
+
+if(node.type == "sugar-collection") {
+	if(elem.counter) elem.counter++
+	console.warn("htmlify: made " + node.type + " with observe=" + elem.observe + " id=" + elem.id + " counter=" + elem.counter)
+} else {
+	console.warn("htmlify: made " + node.type)	
+}
 
 	if(parent) parent.append(elem)
 

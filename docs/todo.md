@@ -1,9 +1,20 @@
 
-- federated version of this? so that people can deploy their own copy
-- 
+todos
+	* hook up firebase at least crudely
+		- test; can i make posts, can i browse, login, edit, do auth events work in a plausible way?
+		- fix observability
+		- see if there is a real time response
+
+	- demonstrate permissions and powers in some way
+
+	- switch to lit.dev
+
+	- image uploading; and fleshing out volatile -> especially would be nice to have sponsor and so on
+
+	- federated version of this? so that people can deploy their own copy; think about it
 
 
-# TODO CORE DEMO
+# DEMO UX
 
 	-> i think a nav bar should basically be something like: [home/flocks][map][network][...]
 
@@ -35,9 +46,6 @@
 
 	- notifications
 
-	- many profiles
-		- this may be used bo the network page for example
-
 	- a single profile
 		- this is for the benefit of others as well as oneself
 		- show a large depiction
@@ -47,31 +55,11 @@
 
 	- picker for page of art assets
 
-# TODO WIDGETS
-
-	* 3d spinner
-		- try move a few dependencies out of main index.html to modules
-	- 3d picker
-	- finish image uploader
-	- 3d map
-	- firebase
-
-# TODO OTHERWISE
-
-	- render() is doing a full rebuild (as per my design) but this is incredibly expensive if page has expensive components.
+# TODO CORE PROPS
 
 	- bread crumbs?
 
 	- write actual permissions based security layer for posting on client and server
-
-	- there are more re-renders than i like; such as on forms on each prop change...?
-
-	- right now i use "static defaults" and I write props directly onto the object
-		both preact and react do this differently; I should use of their name spaces...
-		for example it may make more sense to write to .state or .props to separate concerns
-
-	- there is an idea of volatile; this may need to be pulled up to the top level or something
-		- this is also important for images
 
 	- cards non critical features to do
 		- test out side by side
@@ -87,37 +75,15 @@
 		- collection detail url and edit url customized?
 
 	- 3d components
-		- individual objects
 		- 3d map
 		- 3d multiplayer space
 
 # TODO STYLE
 
-- style issues?
-
+	- have a dark style
 	- consider simplifying and reducing the base css styles to be more minimal
 	- rebassjs.org has some nice style ideas that could be used in cards
-	- have a dark style
 	- explore fun effects and layouts a bit - purely as a design exploration
 		- ie; recreate things like https://www.domestika.org/en/courses/1373-psychedelic-animation-with-photoshop-and-after-effect
 		- Also may be worth just enumerating practical transitions and effects:
 		- also : https://www.youtube.com/watch?v=YHQ820W8FRw
-
-	? delete style-site -> fold into base
-
-
-// this is an unused idea for expressing routes in a more declarative way
-router.bundle({
-	splash:{
-		conditions:(segments)=>{ return (!segments || segments.length<1 || !segments[0].length) },
-		success:{element:"splash-page",state:state},
-	},
-	login:{
-		conditions:()=>{ if(state.currentParty) return "/" } // should return a new choice
-		success:{element:"login-element",login:db.login.bind(db)}
-	},
-	signup:{
-
-	},
-})
-

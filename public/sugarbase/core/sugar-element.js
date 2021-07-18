@@ -78,7 +78,7 @@ export class SugarElement extends HTMLElement {
 
 	propChanged(key,value) {
 		// subclass this if you want to stop auto-updating - TODO think of nicer ways; such as bundles of changes?
-		if(this.debug) console.warn("sugar-element: prop change " + key + " " + value)
+		if(this.debug) console.warn("sugar-element: type=" + this.constructor.name + " prop change key=" + key + " value=" + value)
 		this.rerender()
 	}
 
@@ -102,7 +102,7 @@ export class SugarElement extends HTMLElement {
 	}
 
 	rerender() {
-		if(!this.render) return
+		if(!this.render || !this.isConnected) return
 		if(this.debug) console.warn("sugar-element: rerender() called... (may be first render or a force update notification) for "  + this.constructor.name)
 		htmlify2dom(this,this.render(),true)
 	}

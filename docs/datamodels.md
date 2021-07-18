@@ -1,4 +1,32 @@
 
+# Data
+
+Typically apps store these kinds of data objects :
+
+	+ authentication (distinct from participant profiles)
+
+	+ participant profiles
+
+	+ groups
+
+	+ posts
+
+	+ relationships between entities (social network, parent / child )
+
+	+ permissions
+
+	+ notifications
+
+	+ invitations
+
+	+ favorites / bookmarks
+
+	+ images
+
+	+ 3d assets
+
+	+ analytics and logging
+
 # Data models for typical multiplayer apps
 
 There are many theories of how databases should represent state; should classes of objects be disjoint, should tables be fully normalized and so on. But loosely speaking what are the distinct kinds of data objects typical multiplayer apps are concerned with? What are the disjoint database tables that are needed at a minimum to capture these kinds of typical apps?
@@ -20,17 +48,17 @@ class auth {
 }
 ```
 
-## Artifact Table
+## Artifact Class
 
-I use the term "Artifacts" to indicate content that is created by participants - that is not built in.
-
-Artifacts are often self-similar having a creator, permissions, title, an associated image, a description, creation date, last update. The primary feature of artifacts is that they are often related to each another: such as a person is in one or more teams, or a person is in one or more chat sessions, or a post is in one group.
+I'm using the term "Artifacts" to indicate content that is created by participants - that is not built in.
 
 What kinds of artifacts do typical systems have? In Eventbrite we have users and events and tickets. In Zoom we have users and events and actual zoom sessions (which are in effect a proxy of the event). In Reddit we have users, subs, posts and responses. In Mozilla Hubs we have users, abstract rooms, and room instances - as well as the products of user activity such as created objects and user movement.
 
-While separate database tables can be used to represent each kind of artifact, because artifacts are so self-similar it can make sense to use a beefy-base-class anti-pattern to capture the concept.
+Artifacts are often self-similar having a sponsor, permissions, title, an associated image, a description, creation date, last update. The primary feature of artifacts is that they are often related to each another: such as a person is in one or more teams, or a person is in one or more chat sessions, or a post is in one group.
 
-The main win with a beefy-base-class is that relationships can be created without having to manage complex inter-table relationships. Also ux components can then generally present the single concept without having many variations of ux components for each slight variation in schema.
+While separate database tables can be used to represent each kind of artifact, because artifacts are so self-similar it can make sense to use a beefy-base-class anti-pattern to capture the concept. Or even if separate tables are used, it can make sense to treat all artifacts as the same "base class" conceptually; even if this can have too many unused props.
+
+The main win with a beefy-base-class is code simplicity. UX components can generally present the single concept without having many variations of ux components for each slight variation in schema.
 
  A typical catch all schema here might be:
 
@@ -52,25 +80,25 @@ class artifact {
 }
 ```
 
-Let's classify typical artifacts:
+Let's drill down on typical artifacts:
 
 1. Participants - authenticated users are typified by having a title, an associated image, a description. Effectively a participant is the "in game" proxy or representation of an authenticated log-in account - it's the equivalent of your character in a D&D game or a monopoly player piece; in a 3d game this would be a persons avatar. It's just one more in-game object that is a place-holder to visually represent your state for yourself and for other users.
 
 2. Lobbies, Spaces, Rooms, Forums - a "place" where participants engage in interactions also appears to be a kind of content itself. A space may collect participants briefly, or persistently. A space may be transient or not. Spaces may restrict participation.
 
-3. Teams - aggregates of related people also are arguably a kind of grouping mechanism; but may be redundant. Not all products have a separate concept of teams because it is close to the concept of a space in general (why group as a team when you can just group people in a room?). Many apps only have a literal grouping concept of a game world; such as a "sub" - rather than a distinct concept of a grouping of people and then separately a place where they can go to. In a sense a team is always in a place in a service like Reddit.
+3. Flocks, Groups, Teams - aggregates of related people also are arguably a kind of grouping mechanism. Not all products have a separate concept of teams because it is close to the concept of a space in general (why group as a team when you can just group people in a room?). Many apps only have a literal grouping concept of a game world; such as a "sub" - rather than a distinct concept of a grouping of people and then separately a place where they can go to. In a sense a team is always in a place in a service like Reddit.
 
-4. Larger clusterings - another sometimes present clustering concept is to group "groups of teams" or "groups of rooms" together into a constellation of related parties. This can be used to indicate concepts like "a company" that has "teams". It implies some trust and some relationship. It may make sense to generally support some level of grouping abstraction.
+4. Larger clusterings - another sometimes present clustering concept is to group "groups of teams" or "groups of rooms" together into a constellation of related parties. This can be used to indicate concepts like "a company" that has "teams". It implies some trust and some relationship. It may make sense to generally support some level of grouping abstraction. But when you start to get into the weeds here it may be time to think about tags or search.
 
-5. Posts. Humans often mediate interaction with each other not directly but through a mediation object. This is a well known phenomena from child psychology where we see young children typically learning to interact with other humans by first both interacting through a third proxy object that they're both manipulating. Often in games or digital experiences there is a similar kind of anchoring spark or impetus for other interactions. For some systems an "event" is the spark, for other systems (such as Reddit) a "post" is the spark around which other responses or activities happen. A post can also be thought of as an in-game artifact or object; a placeholder for engagement or interaction. Posts can be decorated with responses as well.
+5. Posts. Humans often mediate interaction with each other not directly but through a mediation object. This is a well known phenomena from child psychology where we see young children typically learning to interact with other humans by first both interacting through a third proxy object that they're both manipulating. Often in games or digital experiences there is a similar kind of anchoring spark or impetus for other interactions. For some systems an "event" is the spark, for other systems (such as Reddit) a "post" is the spark around which other responses or activities happen. A post can also be thought of as an in-game artifact or object; a placeholder for engagement or interaction. Posts can be decorated with responses as well; note that "responses" tend to be of a slightly different flavor than the original call.
 
-6. Events - events are a conceptually important concept. They pin down a fourth dimension of location: time. For example one person may take a private group of people who are clustered together and fire off an invitation for a meetup in a certain room at a certain time of day for a certain period. They're not strictly an artifact but they do relate other artifacts to each other.
+6. Events - events are a kind of post.
 
 7. 3D Objects. For a 3D game such as Hubs we see that some artifacts can also be prototypical, such as a prototypical 3d fireball object, or an instance of a 3d fireball object with a dynamic location in space with position, yaw pitch rotation and scale and other modifiers possibly. Other artifacts include the idea of a room, or actual rooms themselves. Objects may also be children of other artifacts - a chair may be in a room, a player may be on a chair - while also still in a room (a person should not vanish from a room db query if they sit in a chair).
 
-## Activity Table
+## Activity Class
 
-There's a class of alerts, reminders, analytics logging and suchlike that is distinct from other state. It can be a beefy base-class as well; capturing a few extra fields that are not always used. It makes sense to have a separate table for tracking this state. The value here is multifold. A user can review their own state to find something they want to rememeber or go back to. Analytics on aggregates of user state are useful for examining user sentiment and engagement with product.
+There's a class of alerts, reminders, analytics logging and suchlike that is distinct from other state. It can be a separate base class. The value here is multifold. A user can review their own state to find something they want to rememeber or go back to. Analytics on aggregates of user state are useful for examining user sentiment and engagement with product.
 
 ```javascript
 class activity {
@@ -86,15 +114,15 @@ class activity {
 }
 ```
 
-## Favorites, Bookmarks, Upvotes Table
+## Favorites, Bookmarks, Upvotes Class
 
 There's a class of lightweight marking up of in game artifacts - upvotes, saving a bookmark and so on. It makes sense to have a separate table to enumerate a relationship between a person and an artifact. This can actually be done in a relations table rather than having a private table.
 
-## Invitation Table
+## Invitation Class
 
 Often a person wants to invite other people to join in on an experience. There's a class of deep-linking invites where you want to be able to compose an URL that has a limited duration invitation, or extends a participation privilege to a person based on an email, or a limited cap set of participants - or even just an open invitation to a specific group or event. It makes sense to provide a table for tracking all extended invites, and then chaperoning new participants who visit the site with the invite token.
 
-## Relationships and Permissions Table
+## Relationships and Permissions Class
 
 The engine has many relational questions that it is constantly asking such as:
 

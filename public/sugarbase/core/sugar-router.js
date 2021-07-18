@@ -103,6 +103,10 @@ export default class SugarRouter {
 		// get url as parts
 		let segments = url.split("/")
 
+		// throw away empty segments
+		segments = segments.filter( (el) => { return el && el.length })
+
+
 		// ask handlers about url and get back a hint
 		let hint = 0
 		for(let i = 0;hint==0 && i<this.handlers.length;i++) {
@@ -168,8 +172,7 @@ export default class SugarRouter {
 			return
 		}
 
-		// the router passes all user supplied state to page every time the page is visited
-		// TODO it is arguable that triggering the getter/setters here is a good or bad idea because they can force a redraw()
+		// go out of our way to poke all the state back into the page - which may trigger repaints
 		Object.entries(args).forEach( ([k,v]) => {
 			if(this.debug)console.warn("router: passing advice " + k + " =" + v)
 			inst[k]=v

@@ -4,7 +4,6 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Lora&display=swap'); */
 
 :root {
-	--sugarnavheight:40px;
 	--sugarcontentwidth:800px;
 	--sugarcontentpadding:8px;
 	--sugarcontentmargin:8px;
@@ -34,7 +33,6 @@ sugar-nav {
 	width: var(--sugarcontentwidth);
 	margin-left:auto;
 	margin-right:auto;
-	height: var(--sugarnavheight);
 	font-size:2em;
 	display: block;
 }
